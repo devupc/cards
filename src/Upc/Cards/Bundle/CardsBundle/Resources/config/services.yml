@@ -1,0 +1,7 @@
+parameters:
+#    cards.example.class: Upc\Cards\Bundle\CardsBundle\Example
+
+services:
+#    cards.example:
+#        class: %cards.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

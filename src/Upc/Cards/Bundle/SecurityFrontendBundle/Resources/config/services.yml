@@ -1,0 +1,7 @@
+parameters:
+#    security_frontend.example.class: Upc\Cards\Bundle\SecurityFrontendBundle\Example
+
+services:
+#    security_frontend.example:
+#        class: %security_frontend.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,12 @@
+cards:
+    resource: "@CardsBundle/Resources/config/routing.yml"
+    prefix:   /
+
+security_frontend:
+    resource: "@SecurityFrontendBundle/Resources/config/routing.yml"
+    prefix:   /
+
+security_backend:
+    resource: "@SecurityBackendBundle/Resources/config/routing.yml"
+    prefix:   /
+

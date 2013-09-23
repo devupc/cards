@@ -1,0 +1,3 @@
+security_frontend_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: SecurityFrontendBundle:Default:index }
