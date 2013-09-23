@@ -8,6 +8,6 @@ class HomeController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('CardsBundle:Home:index.html.twig', array('name' => '$name'));
+        return $this->render('CardsBundle:Home:index.html.twig');
     }
 }
