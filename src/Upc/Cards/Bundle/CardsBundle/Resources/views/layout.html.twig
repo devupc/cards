@@ -1,41 +1,37 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Carousel Template &middot; Bootstrap</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <head>
+        <meta charset="utf-8">
+        <title>Halcon Postales</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-    <!-- Le styles -->
-    <link href="{{ asset('bundles/frontend/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('bundles/frontend/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+        <!-- Le styles -->
+        <link href="{{ asset('bundles/frontend/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/frontend/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
     {% block css %} {% endblock %}
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="{{ asset('bundles/frontend/js/html5shiv.js') }}"></script>
-    <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
-  </head>
-
-  <body>
-      {% block content %} {% endblock %}
-      <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{ asset('bundles/frontend/js/jquery.js') }}"></script>
-    <script src="{{ asset('bundles/frontend/js/bootstrap.min.js') }}"></script>
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="{{ asset('bundles/frontend/js/html5shiv.js') }}"></script>
+        <![endif]-->
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+        <link href="{{ asset('bundles/frontend/css/global.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        {% include "CardsBundle::menu.html.twig" %}
+        {% block content %} {% endblock %}
+        <script src="{{ asset('bundles/frontend/js/jquery.js') }}"></script>
+        <script src="{{ asset('bundles/frontend/js/bootstrap.min.js') }}"></script>
     <script>
-      !function ($) {
-        $(function(){
-          // carousel demo
-          $('#myCarousel').carousel();
-        });
-      }(window.jQuery);
-    </script>
-    <script src="{{ asset('bundles/frontend/js/holder.js') }}"></script>
-  </body>
-</html>
+        !function($) {
+            $(function() {
+                // carousel demo
+                $('#myCarousel').carousel();
+            });
+        }(window.jQuery);
+        </script>
+        <script src="{{ asset('bundles/frontend/js/holder.js') }}"></script>
+    </body>
+        </html>

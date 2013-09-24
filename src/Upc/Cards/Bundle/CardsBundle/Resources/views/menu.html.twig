@@ -1,0 +1,41 @@
+<div class="navbar-wrapper">
+    <div class="container">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="#">Halcon Postales</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li class="active"><a href="#categorias">Categorias</a></li>
+                        <li><a href="#novedades">Novedades</a></li>
+                        <li><a href="#comentarios">Comentarios</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li><a href="/signup">Registro</a></li>
+                        <li class="divider-vertical"></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Loguearse <strong class="caret"></strong></a>
+                            <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                                <form method="post" action="login" accept-charset="UTF-8">
+                                    <input style="margin-bottom: 15px;" type="text" placeholder="Usuario" id="username" name="username">
+                                    <input style="margin-bottom: 15px;" type="password" placeholder="Contraseña" id="password" name="password">
+                                    <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
+                                    <label class="string optional" for="user_remember_me"> Remember me</label>
+                                    <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Sign In">
+                                    <label style="text-align:center;margin-top:5px">or</label>
+                                    <input class="btn btn-primary btn-block" type="button" id="login-facebook" value="Loguearse con Facebook">
+                                    <input class="btn btn-primary btn-block" type="button" id="login-twitter" value="Loguearse con Twitter">
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div><!-- /.navbar-inner -->
+        </div><!-- /.navbar -->
+
+    </div> <!-- /.container -->
+</div><!-- /.navbar-wrapper -->
