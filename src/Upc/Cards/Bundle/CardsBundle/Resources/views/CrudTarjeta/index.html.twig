@@ -1,0 +1,59 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Tarjeta list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Tipopostal</th>
+                <th>Titulo</th>
+                <th>Descripcion</th>
+                <th>Etiquetabusqueda</th>
+                <th>Rutatarjeta</th>
+                <th>Rutaminiatura</th>
+                <th>Genero</th>
+                <th>Invitadodisponible</th>
+                <th>Fecharegistro</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('admin_tarjetas_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.tipopostal }}</td>
+                <td>{{ entity.titulo }}</td>
+                <td>{{ entity.descripcion }}</td>
+                <td>{{ entity.etiquetabusqueda }}</td>
+                <td>{{ entity.rutatarjeta }}</td>
+                <td>{{ entity.rutaminiatura }}</td>
+                <td>{{ entity.genero }}</td>
+                <td>{{ entity.invitadodisponible }}</td>
+                <td>{% if entity.fecharegistro %}{{ entity.fecharegistro|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.estado }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_tarjetas_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_tarjetas_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('admin_tarjetas_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

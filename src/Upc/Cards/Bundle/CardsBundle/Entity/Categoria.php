@@ -33,7 +33,7 @@ class Categoria
 
     /**
      * @var boolean
-     * @ORM\Column(name="ordengrupo", type="boolean", nullable=true)
+     * @ORM\Column(name="ordengrupo", type="integer", nullable=false)
      */
     private $ordengrupo;
 
@@ -45,17 +45,20 @@ class Categoria
 
     /**
      * @var boolean
-     * @ORM\Column(name="estado", type="boolean", nullable=true)
+     * @ORM\Column(name="estado", type="integer", nullable=true)
      */
     private $estado;
 
     /**
      * @var \Upc\Cards\Bundle\CardsBundle\Entity\Categoriagrupo
-     * @ORM\ManyToOne(targetEntity="Categoriagrupo", inversedBy="tarjetas")
+     * @ORM\ManyToOne(targetEntity="Categoriagrupo", inversedBy="")
      * @ORM\JoinColumn(name="idcategoriagrupo", referencedColumnName="idcategoriagrupo", nullable=true)
      */
     private $idcategoriagrupo;
 
+    public function getEstadoDisplay(){
+        return \Upc\Cards\Bundle\CardsBundle\CardsBundle::$ESTADOS[$this->getEstado()];
+    }
 
     /**
      * Get idcategoria

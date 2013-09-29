@@ -2,6 +2,11 @@ parameters:
 #    cards.example.class: Upc\Cards\Bundle\CardsBundle\Example
 
 services:
-#    cards.example:
-#        class: %cards.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    cards_crud.form.type.categoria:
+        class: Upc\Cards\Bundle\CardsBundle\Form\Type\CategoriaType
+        tags:
+            - { name: form.type, alias: categoria }
+    cards_crud.form.type.categoria_search:
+        class: Upc\Cards\Bundle\CardsBundle\Form\Type\CategoriaSearchType
+        tags:
+            - { name: form.type, alias: categoria_search }

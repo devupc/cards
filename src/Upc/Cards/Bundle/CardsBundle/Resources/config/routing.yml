@@ -1,3 +1,12 @@
 cards_homepage:
     pattern:  /
     defaults: { _controller: CardsBundle:Home:index }
+########################CRUDS CONTROLLERS#########################
+_admin_tarjetas:
+    resource: "@CardsBundle/Controller/TarjetaCrudController.php"
+    type:     annotation
+    prefix:   /admin/tarjetas
+_admin_categorias:
+    resource: "@CardsBundle/Controller/CategoriaCrudController.php"
+    type:     annotation
+    prefix:   /admin/categorias
