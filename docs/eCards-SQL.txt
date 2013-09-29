@@ -1,0 +1,815 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+DROP SCHEMA IF EXISTS `eCards` ;
+CREATE SCHEMA IF NOT EXISTS `eCards` DEFAULT CHARACTER SET latin1 COLLATE latin1_spanish_ci ;
+USE `eCards` ;
+
+-- -----------------------------------------------------
+-- Table `eCards`.`perfil`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`perfil` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`perfil` (
+  `idPerfil` INT NOT NULL AUTO_INCREMENT ,
+  `nombre` VARCHAR(45) NOT NULL ,
+  `descripcion` VARCHAR(45) NULL ,
+  `estado` TINYINT(1) NULL DEFAULT 0 ,
+  PRIMARY KEY (`idPerfil`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`pais`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`pais` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`pais` (
+  `idPais` INT NOT NULL AUTO_INCREMENT ,
+  `nombreES` VARCHAR(90) NOT NULL ,
+  `nombreEN` VARCHAR(90) NULL ,
+  `visible` TINYINT(1) NULL DEFAULT 0 ,
+  PRIMARY KEY (`idPais`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`usuario`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`usuario` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`usuario` (
+  `idUsuario` INT NOT NULL AUTO_INCREMENT ,
+  `idPerfil` INT NOT NULL ,
+  `idPais` INT NULL ,
+  `nombres` VARCHAR(90) NOT NULL ,
+  `apellidos` VARCHAR(90) NOT NULL ,
+  `correo` VARCHAR(180) NOT NULL ,
+  `correoAlternativo` VARCHAR(180) NULL ,
+  `usuario` VARCHAR(30) NULL ,
+  `contrasena` VARCHAR(60) NOT NULL ,
+  `usuarioFacebook` VARCHAR(90) NULL ,
+  `contrasenaFacebook` VARCHAR(50) NULL ,
+  `genero` TINYINT(1) NOT NULL ,
+  `ciudad` VARCHAR(60) NULL ,
+  `fechaNacimiento` DATETIME NOT NULL ,
+  `contadorIntentoInicio` TINYINT NULL ,
+  `fechaBloqueoTemporal` DATETIME NULL ,
+  `fechaUltimoInicio` DATETIME NULL ,
+  `estado` TINYINT(1) NULL DEFAULT 1 ,
+  PRIMARY KEY (`idUsuario`) ,
+  INDEX `fk_usuario_perfil1_idx` (`idPerfil` ASC) ,
+  INDEX `fk_usuario_pais1_idx` (`idPais` ASC) ,
+  CONSTRAINT `fk_usuario_perfil1`
+    FOREIGN KEY (`idPerfil` )
+    REFERENCES `eCards`.`perfil` (`idPerfil` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_usuario_pais1`
+    FOREIGN KEY (`idPais` )
+    REFERENCES `eCards`.`pais` (`idPais` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`tarjeta`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`tarjeta` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`tarjeta` (
+  `idTarjeta` INT NOT NULL AUTO_INCREMENT ,
+  `idUsuarioRegistra` INT NOT NULL ,
+  `tipoPostal` INT NULL ,
+  `titulo` VARCHAR(90) NOT NULL ,
+  `descripcion` VARCHAR(254) NOT NULL ,
+  `etiquetaBusqueda` VARCHAR(150) NULL ,
+  `nombreFichero` VARCHAR(30) NULL ,
+  `rutaTarjeta` VARCHAR(60) NULL ,
+  `rutaMiniatura` VARCHAR(60) NULL ,
+  `genero` TINYINT(1) NULL ,
+  `invitadoDisponible` TINYINT(1) NULL DEFAULT 0 ,
+  `fechaRegistro` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  `estado` TINYINT(1) NULL DEFAULT 0 ,
+  PRIMARY KEY (`idTarjeta`) ,
+  INDEX `fk_tarjeta_usuario1_idx` (`idUsuarioRegistra` ASC) ,
+  CONSTRAINT `fk_tarjeta_usuario1`
+    FOREIGN KEY (`idUsuarioRegistra` )
+    REFERENCES `eCards`.`usuario` (`idUsuario` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`tipo`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`tipo` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`tipo` (
+  `idTipo` INT NOT NULL AUTO_INCREMENT ,
+  `nombre` VARCHAR(60) NOT NULL ,
+  `descripcionTipo` VARCHAR(90) NULL ,
+  `estado` TINYINT(1) NULL DEFAULT 1 ,
+  PRIMARY KEY (`idTipo`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`tipoDetalle`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`tipoDetalle` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`tipoDetalle` (
+  `idTipoDetalle` INT NOT NULL AUTO_INCREMENT ,
+  `idTipo` INT NOT NULL ,
+  `nombreDetalle` VARCHAR(60) NOT NULL ,
+  `descripcionDetalle` VARCHAR(90) NULL ,
+  `estado` TINYINT(1) NULL ,
+  PRIMARY KEY (`idTipoDetalle`) ,
+  INDEX `fk_tiposDetalle_tipos_idx` (`idTipo` ASC) ,
+  CONSTRAINT `fk_tiposDetalle_tipos`
+    FOREIGN KEY (`idTipo` )
+    REFERENCES `eCards`.`tipo` (`idTipo` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`envioTarjeta`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`envioTarjeta` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`envioTarjeta` (
+  `idEnvioTarjeta` INT NOT NULL AUTO_INCREMENT ,
+  `idTarjeta` INT NOT NULL ,
+  `idUsuario` INT NOT NULL ,
+  `direccionIP` VARCHAR(20) NULL ,
+  `destinatarioTrato` VARCHAR(30) NULL ,
+  `destinatarioNombre` VARCHAR(90) NOT NULL ,
+  `destinatarioCorreo` VARCHAR(90) NOT NULL ,
+  `remitenteNombre` VARCHAR(90) NOT NULL ,
+  `remitenteCorreo` VARCHAR(90) NOT NULL ,
+  `mensaje` TEXT NULL ,
+  `fechaRegistro` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  `fechaEnvio` DATETIME NULL ,
+  `fechaRecepcion` DATETIME NULL ,
+  `fechaVence` DATETIME NULL ,
+  `estado` TINYINT(1) NULL DEFAULT 0 ,
+  PRIMARY KEY (`idEnvioTarjeta`) ,
+  INDEX `fk_envioTarjeta_tarjeta1_idx` (`idTarjeta` ASC) ,
+  CONSTRAINT `fk_envioTarjeta_tarjeta1`
+    FOREIGN KEY (`idTarjeta` )
+    REFERENCES `eCards`.`tarjeta` (`idTarjeta` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`calificacion`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`calificacion` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`calificacion` (
+  `idCalificacion` INT NOT NULL AUTO_INCREMENT ,
+  `idTarjeta` INT NOT NULL ,
+  `cuentaEnvio` INT NULL DEFAULT 0 ,
+  `cuentaMeGusta` INT NULL DEFAULT 0 ,
+  `cuentaRecomendado` INT NULL DEFAULT 0 ,
+  `hombre1` INT NULL DEFAULT 0 ,
+  `hombre2` INT NULL DEFAULT 0 ,
+  `hombre3` INT NULL DEFAULT 0 ,
+  `hombre4` INT NULL DEFAULT 0 ,
+  `hombre5` INT NULL DEFAULT 0 ,
+  `mujer1` INT NULL DEFAULT 0 ,
+  `mujer2` INT NULL DEFAULT 0 ,
+  `mujer3` INT NULL DEFAULT 0 ,
+  `mujer4` INT NULL DEFAULT 0 ,
+  `mujer5` INT NULL DEFAULT 0 ,
+  `fechaUltimaCalificacion` DATETIME NULL ,
+  `estado` TINYINT(1) NULL ,
+  PRIMARY KEY (`idCalificacion`) ,
+  INDEX `fk_calificacion_tarjeta1_idx` (`idTarjeta` ASC) ,
+  CONSTRAINT `fk_calificacion_tarjeta1`
+    FOREIGN KEY (`idTarjeta` )
+    REFERENCES `eCards`.`tarjeta` (`idTarjeta` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`contacto`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`contacto` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`contacto` (
+  `idContacto` INT NOT NULL AUTO_INCREMENT ,
+  `idUsuario` INT NOT NULL ,
+  `trato` VARCHAR(45) NULL ,
+  `nombre` VARCHAR(60) NOT NULL ,
+  `apellido` VARCHAR(60) NULL ,
+  `correo` VARCHAR(90) NOT NULL ,
+  `correoAlternativo` VARCHAR(90) NULL ,
+  `genero` TINYINT(1) NULL ,
+  `fechaCumpleanos` DATETIME NULL ,
+  `tipoOrigen` INT NULL ,
+  `tipoRelacion` INT NULL ,
+  `estadoCivil` INT NULL ,
+  `fechaAniversario` DATETIME NULL ,
+  `telefonoMovil` VARCHAR(15) NULL ,
+  `telefonoFijo` VARCHAR(15) NULL ,
+  `fechaRegistro` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  `estado` TINYINT NULL ,
+  PRIMARY KEY (`idContacto`) ,
+  INDEX `fk_contactos_usuario1_idx` (`idUsuario` ASC) ,
+  CONSTRAINT `fk_contactos_usuario1`
+    FOREIGN KEY (`idUsuario` )
+    REFERENCES `eCards`.`usuario` (`idUsuario` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`categoriaGrupo`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`categoriaGrupo` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`categoriaGrupo` (
+  `idCategoriaGrupo` INT NOT NULL AUTO_INCREMENT ,
+  `nombre` VARCHAR(45) NOT NULL ,
+  `descripcion` VARCHAR(90) NULL ,
+  `fechaRegistro` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  `estado` TINYINT(1) NULL DEFAULT 1 ,
+  PRIMARY KEY (`idCategoriaGrupo`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`categoria`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`categoria` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`categoria` (
+  `idCategoria` INT NOT NULL AUTO_INCREMENT ,
+  `idCategoriaGrupo` INT NOT NULL ,
+  `nombreCategoria` VARCHAR(60) NOT NULL ,
+  `descripcion` VARCHAR(90) NULL ,
+  `ordenGrupo` TINYINT NULL DEFAULT 0 ,
+  `fechaRegistro` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  `estado` TINYINT(1) NULL DEFAULT 0 ,
+  PRIMARY KEY (`idCategoria`) ,
+  INDEX `fk_categoria_categoriaGrupo1_idx` (`idCategoriaGrupo` ASC) ,
+  CONSTRAINT `fk_categoria_categoriaGrupo1`
+    FOREIGN KEY (`idCategoriaGrupo` )
+    REFERENCES `eCards`.`categoriaGrupo` (`idCategoriaGrupo` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`parametroSistema`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`parametroSistema` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`parametroSistema` (
+  `idParametroSistema` INT NOT NULL AUTO_INCREMENT ,
+  `nombre` VARCHAR(60) NOT NULL ,
+  `descripcion` VARCHAR(90) NULL ,
+  `valorNum1` INT NULL ,
+  `valorNum2` INT NULL ,
+  `valorNum3` INT NULL ,
+  `valorAlfa1` VARCHAR(60) NULL ,
+  `valorAlfa2` VARCHAR(60) NULL ,
+  `valorAlfa3` VARCHAR(60) NULL ,
+  PRIMARY KEY (`idParametroSistema`) )
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`tarjetaCategoria`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`tarjetaCategoria` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`tarjetaCategoria` (
+  `idTarjetaCategoria` INT NOT NULL AUTO_INCREMENT ,
+  `idCategoria` INT NOT NULL ,
+  `idTarjeta` INT NOT NULL ,
+  `idUsuario` INT NOT NULL ,
+  `fechaRegistro` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  `estado` TINYINT(1) NULL DEFAULT 0 ,
+  PRIMARY KEY (`idTarjetaCategoria`) ,
+  INDEX `fk_tarjetaCategoria_tarjeta1_idx` (`idTarjeta` ASC) ,
+  INDEX `fk_tarjetaCategoria_categoria1_idx` (`idCategoria` ASC) ,
+  INDEX `fk_tarjetaCategoria_usuario1_idx` (`idUsuario` ASC) ,
+  CONSTRAINT `fk_tarjetaCategoria_tarjeta1`
+    FOREIGN KEY (`idTarjeta` )
+    REFERENCES `eCards`.`tarjeta` (`idTarjeta` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tarjetaCategoria_categoria1`
+    FOREIGN KEY (`idCategoria` )
+    REFERENCES `eCards`.`categoria` (`idCategoria` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tarjetaCategoria_usuario1`
+    FOREIGN KEY (`idUsuario` )
+    REFERENCES `eCards`.`usuario` (`idUsuario` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `eCards`.`mensajeControlado`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `eCards`.`mensajeControlado` ;
+
+CREATE  TABLE IF NOT EXISTS `eCards`.`mensajeControlado` (
+  `idMensajeError` INT NOT NULL AUTO_INCREMENT ,
+  `numero` INT NOT NULL DEFAULT 0 ,
+  `titulo` VARCHAR(60) NOT NULL ,
+  `descripcion` VARCHAR(90) NOT NULL ,
+  `fechaRegistro` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+  `estado` TINYINT(1) NULL DEFAULT 0 ,
+  PRIMARY KEY (`idMensajeError`) )
+ENGINE = InnoDB;
+
+USE `eCards` ;
+USE `eCards`;
+
+DELIMITER $$
+
+USE `eCards`$$
+DROP TRIGGER IF EXISTS `eCards`.`tarjeta_AINS` $$
+USE `eCards`$$
+
+
+CREATE TRIGGER `tarjeta_AINS` AFTER INSERT ON tarjeta FOR EACH ROW BEGIN
+	-- SET @idTarjeta = LAST_INSERT_ID(); 
+    SET @idTarjeta = (SELECT MAX(idTarjeta) FROM tarjeta); 
+    INSERT INTO calificacion (idTarjeta) VALUES (@idTarjeta);
+  END
+$$
+
+
+DELIMITER ;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`perfil`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`perfil` (`idPerfil`, `nombre`, `descripcion`, `estado`) VALUES (1, 'Administrador', 'Adminsitrador del Sistema', 1);
+INSERT INTO `eCards`.`perfil` (`idPerfil`, `nombre`, `descripcion`, `estado`) VALUES (2, 'Usuario', 'Usuario Registrado', 1);
+INSERT INTO `eCards`.`perfil` (`idPerfil`, `nombre`, `descripcion`, `estado`) VALUES (3, 'Invitado', 'Visitante No registrado', 1);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`pais`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (1, 'Afganistán', 'Afghanistan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (2, 'Akrotiri', 'Akrotiri', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (3, 'Albania', 'Albania', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (4, 'Alemania', 'Germany', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (5, 'Andorra', 'Andorra', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (6, 'Angola', 'Angola', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (7, 'Anguila', 'eel', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (8, 'Antártida', 'Antarctica', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (9, 'Antigua y Barbuda', 'Antigua and Barbuda', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (10, 'Antillas Neerlandesas', 'Netherlands Antilles', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (11, 'Arabia Saudí', 'Saudi Arabia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (12, 'Arctic Ocean', 'Arctic Ocean', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (13, 'Argelia', 'Algeria', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (14, 'Argentina', 'Argentina', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (15, 'Armenia', 'Armenia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (16, 'Aruba', 'Aruba', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (17, 'Ashmore and Cartier Islands', 'Ashmore and Cartier Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (18, 'Atlantic Ocean', 'Atlantic Ocean', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (19, 'Australia', 'Australia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (20, 'Austria', 'Austria', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (21, 'Azerbaiyán', 'Azerbaijan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (22, 'Bahamas', 'Bahamas', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (23, 'Bahráin', 'Bahrain', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (24, 'Bangladesh', 'Bangladesh', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (25, 'Barbados', 'Barbados', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (26, 'Bélgica', 'Belgium', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (27, 'Belice', 'Belize', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (28, 'Benín', 'Benin', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (29, 'Bermudas', 'Bermuda', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (30, 'Bielorrusia', 'Belarus', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (31, 'Birmania; Myanmar', 'Burma , Myanmar', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (32, 'Bolivia', 'Bolivia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (33, 'Bosnia y Hercegovina', 'Bosnia and Herzegovina', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (34, 'Botsuana', 'Botswana', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (35, 'Brasil', 'Brazil', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (36, 'Brunéi', 'Brunei', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (37, 'Bulgaria', 'Bulgaria', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (38, 'Burkina Faso', 'Burkina Faso', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (39, 'Burundi', 'Burundi', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (40, 'Bután', 'Bhutan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (41, 'Cabo Verde', 'Cape Verde', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (42, 'Camboya', 'Cambodia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (43, 'Camerún', 'Cameroon', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (44, 'Canadá', 'Canada', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (45, 'Chad', 'Chad', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (46, 'Chile', 'Chile', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (47, 'China', 'China', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (48, 'Chipre', 'Cyprus', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (49, 'Clipperton Island', 'Clipperton Island', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (50, 'Colombia', 'Colombia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (51, 'Comoras', 'Comoros', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (52, 'Congo', 'Congo', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (53, 'Coral Sea Islands', 'Coral Sea Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (54, 'Corea del Norte', 'North Korea', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (55, 'Corea del Sur', 'South Korea', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (56, 'Costa de Marfil', 'Ivory Coast', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (57, 'Costa Rica', 'Costa Rica', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (58, 'Croacia', 'Croatia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (59, 'Cuba', 'Cuba', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (60, 'Dhekelia', 'Dhekelia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (61, 'Dinamarca', 'Denmark', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (62, 'Dominica', 'Dominica', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (63, 'Ecuador', 'Ecuador', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (64, 'Egipto', 'Egypt', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (65, 'El Salvador', 'El Salvador', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (66, 'El Vaticano', 'The Vatican', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (67, 'Emiratos Árabes Unidos', 'United Arab Emirates', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (68, 'Eritrea', 'Eritrea', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (69, 'Eslovaquia', 'Slovakia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (70, 'Eslovenia', 'Slovenia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (71, 'España', 'Spain', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (72, 'Estados Unidos', 'U.S.', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (73, 'Estonia', 'Estonia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (74, 'Etiopía', 'Ethiopia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (75, 'Filipinas', 'Philippines', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (76, 'Finlandia', 'Finland', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (77, 'Fiyi', 'Fiji', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (78, 'Francia', 'France', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (79, 'Gabón', 'Gabon', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (80, 'Gambia', 'Gambia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (81, 'Gaza Strip', 'Gaza Strip', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (82, 'Georgia', 'Georgia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (83, 'Ghana', 'Ghana', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (84, 'Gibraltar', 'Gibraltar', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (85, 'Granada', 'Granada', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (86, 'Grecia', 'Greece', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (87, 'Groenlandia', 'Greenland', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (88, 'Guam', 'Guam', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (89, 'Guatemala', 'Guatemala', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (90, 'Guernsey', 'Guernsey', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (91, 'Guinea', 'Guinea', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (92, 'Guinea Ecuatorial', 'Equatorial Guinea', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (93, 'Guinea-Bissau', 'Guinea-Bissau', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (94, 'Guyana', 'Guyana', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (95, 'Haití', 'Haiti', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (96, 'Honduras', 'Honduras', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (97, 'Hong Kong', 'Hong Kong', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (98, 'Hungría', 'Hungary', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (99, 'India', 'India', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (100, 'Indian Ocean', 'Indian Ocean', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (101, 'Indonesia', 'Indonesia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (102, 'Irán', 'Iran', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (103, 'Iraq', 'Iraq', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (104, 'Irlanda', 'Ireland', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (105, 'Isla Bouvet', 'Bouvet Island', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (106, 'Isla Christmas', 'Christmas Island', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (107, 'Isla Norfolk', 'Norfolk Island', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (108, 'Islandia', 'Iceland', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (109, 'Islas Caimán', 'Cayman Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (110, 'Islas Cocos', 'Cocos Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (111, 'Islas Cook', 'Cook Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (112, 'Islas Feroe', 'Faroe Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (113, 'Islas Georgia del Sur y Sandwich del Sur', 'South Georgia and South Sandwich', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (114, 'Islas Heard y McDonald', 'Heard and McDonald Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (115, 'Islas Malvinas', 'Falkland Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (116, 'Islas Marianas del Norte', 'Northern Mariana Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (117, 'Islas Marshall', 'Marshall Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (118, 'Islas Pitcairn', 'Pitcairn Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (119, 'Islas Salomón', 'Solomon Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (120, 'Islas Turcas y Caicos', 'Turks and Caicos', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (121, 'Islas Vírgenes Americanas', 'U.S. Virgin Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (122, 'Islas Vírgenes Británicas', 'BVI', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (123, 'Israel', 'Israel', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (124, 'Italia', 'Italy', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (125, 'Jamaica', 'Jamaica', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (126, 'Jan Mayen', 'Jan Mayen', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (127, 'Japón', 'Japan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (128, 'Jersey', 'jersey', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (129, 'Jordania', 'Jordan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (130, 'Kazajistán', 'Kazakhstan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (131, 'Kenia', 'Kenya', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (132, 'Kirguizistán', 'Kyrgyzstan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (133, 'Kiribati', 'Kiribati', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (134, 'Kuwait', 'Kuwait', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (135, 'Laos', 'Laos', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (136, 'Lesoto', 'Lesotho', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (137, 'Letonia', 'Latvia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (138, 'Lébano', 'Lebanon', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (139, 'Liberia', 'Liberia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (140, 'Libia', 'Libya', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (141, 'Liechtenstein', 'Liechtenstein', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (142, 'Lituania', 'Lithuania', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (143, 'Luxemburgo', 'Luxembourg', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (144, 'Macao', 'Macao', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (145, 'Macedonia', 'macedonia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (146, 'Madagascar', 'Madagascar', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (147, 'Malasia', 'Malaysia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (148, 'Malaui', 'Malawi', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (149, 'Maldivas', 'Maldives', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (150, 'Malí', 'Mali', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (151, 'Malta', 'Malta', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (152, 'Man, Isle of', 'Man , Isle of', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (153, 'Marruecos', 'Morocco', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (154, 'Mauricio', 'Mauricio', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (155, 'Mauritania', 'Mauritania', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (156, 'Mayotte', 'Mayotte', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (157, 'México', 'Mexico', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (158, 'Micronesia', 'Micronesia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (159, 'Moldavia', 'Moldova', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (160, 'Mónaco', 'Monaco', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (161, 'Mongolia', 'Mongolia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (162, 'Montenegro', 'Montenegro', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (163, 'Montserrat', 'Montserrat', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (164, 'Mozambique', 'Mozambique', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (165, 'Mundo', 'world', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (166, 'Namibia', 'Namibia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (167, 'Nauru', 'Nauru', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (168, 'Navassa Island', 'Navassa Island', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (169, 'Nepal', 'Nepal', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (170, 'Nicaragua', 'Nicaragua', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (171, 'Níger', 'Niger', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (172, 'Nigeria', 'Nigeria', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (173, 'Niue', 'Niue', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (174, 'Noruega', 'Norway', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (175, 'Nueva Caledonia', 'new Caledonia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (176, 'Nueva Zelanda', 'NZ', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (177, 'Omán', 'Oman', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (178, 'Pacific Ocean', 'Pacific Ocean', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (179, 'Países Bajos', 'Netherlands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (180, 'Pakistán', 'Pakistan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (181, 'Palaos', 'Palau', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (182, 'Panamá', 'Panama', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (183, 'Papúa-Nueva Guinea', 'Papua New Guinea', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (184, 'Paracel Islands', 'Paracel Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (185, 'Paraguay', 'Paraguay', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (186, 'Perú', 'Peru', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (187, 'Polinesia Francesa', 'French Polynesia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (188, 'Polonia', 'Poland', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (189, 'Portugal', 'Portugal', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (190, 'Puerto Rico', 'Puerto Rico', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (191, 'Qatar', 'Qatar', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (192, 'Reino Unido', 'UK', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (193, 'República Centroafricana', 'Central African Republic', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (194, 'República Checa', 'Czech Republic', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (195, 'República Democrática del Congo', 'DRC', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (196, 'República Dominicana', 'Dominican Republic', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (197, 'Ruanda', 'Rwanda', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (198, 'Rumania', 'Romania', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (199, 'Rusia', 'Russia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (200, 'Sáhara Occidental', 'Western Sahara', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (201, 'Samoa', 'Samoa', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (202, 'Samoa Americana', 'American Samoa', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (203, 'San Cristóbal y Nieves', 'Saint Kitts and Nevis', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (204, 'San Marino', 'San Marino', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (205, 'San Pedro y Miquelón', 'Saint Pierre and Miquelon', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (206, 'San Vicente y las Granadinas', 'Saint Vincent and the Grenadines', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (207, 'Santa Helena', 'Helena', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (208, 'Santa Lucía', 'St. Lucia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (209, 'Santo Tomé y Príncipe', 'Sao Tome and Principe', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (210, 'Senegal', 'Senegal', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (211, 'Serbia', 'Serbia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (212, 'Seychelles', 'Seychelles', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (213, 'Sierra Leona', 'Sierra Leone', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (214, 'Singapur', 'Singapore', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (215, 'Siria', 'Syria', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (216, 'Somalia', 'Somalia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (217, 'Southern Ocean', 'Southern Ocean', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (218, 'Spratly Islands', 'Spratly Islands', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (219, 'Sri Lanka', 'Sri Lanka', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (220, 'Suazilandia', 'Swaziland', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (221, 'Sudáfrica', 'South Africa', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (222, 'Sudán', 'Sudan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (223, 'Suecia', 'Sweden', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (224, 'Suiza', 'Switzerland', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (225, 'Surinam', 'Surinam', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (226, 'Svalbard y Jan Mayen', 'Svalbard and Jan Mayen', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (227, 'Tailandia', 'Thailand', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (228, 'Taiwán', 'Taiwan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (229, 'Tanzania', 'Tanzania', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (230, 'Tayikistán', 'Tajikistan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (231, 'Territorio Británico del Océano Indico', 'British Indian Ocean Territory', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (232, 'Territorios Australes Franceses', 'French Southern Territories', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (233, 'Timor Oriental', 'East Timor', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (234, 'Togo', 'Togo', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (235, 'Tokelau', 'Tokelau', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (236, 'Tonga', 'Tonga', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (237, 'Trinidad y Tobago', 'Trinidad and Tobago', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (238, 'Túnez', 'Tunisia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (239, 'Turkmenistán', 'Turkmenistan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (240, 'Turquía', 'Turkey', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (241, 'Tuvalu', 'Tuvalu', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (242, 'Ucrania', 'Ukraine', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (243, 'Uganda', 'Uganda', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (244, 'Unión Europea', 'EU', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (245, 'Uruguay', 'Uruguay', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (246, 'Uzbekistán', 'Uzbekistan', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (247, 'Vanuatu', 'Vanuatu', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (248, 'Venezuela', 'Venezuela', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (249, 'Vietnam', 'Vietnam', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (250, 'Wake Island', 'Wake Island', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (251, 'Wallis y Futuna', 'Wallis and Futuna', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (252, 'West Bank', 'West Bank', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (253, 'Yemen', 'Yemen', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (254, 'Yibuti', 'Djibouti', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (255, 'Zambia', 'Zambia', 1);
+INSERT INTO `eCards`.`pais` (`idPais`, `nombreES`, `nombreEN`, `visible`) VALUES (256, 'Zimbabue', 'Zimbabwe', 1);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`usuario`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`usuario` (`idUsuario`, `idPerfil`, `idPais`, `nombres`, `apellidos`, `correo`, `correoAlternativo`, `usuario`, `contrasena`, `usuarioFacebook`, `contrasenaFacebook`, `genero`, `ciudad`, `fechaNacimiento`, `contadorIntentoInicio`, `fechaBloqueoTemporal`, `fechaUltimoInicio`, `estado`) VALUES (1, 1, 186, 'Administrador', 'Sistema', 'sysadmin@ecards.pe', NULL, 'sysadmin', 'abc123', NULL, NULL, 1, 'Lima', '1985-01-20', 0, NULL, NULL, 1);
+INSERT INTO `eCards`.`usuario` (`idUsuario`, `idPerfil`, `idPais`, `nombres`, `apellidos`, `correo`, `correoAlternativo`, `usuario`, `contrasena`, `usuarioFacebook`, `contrasenaFacebook`, `genero`, `ciudad`, `fechaNacimiento`, `contadorIntentoInicio`, `fechaBloqueoTemporal`, `fechaUltimoInicio`, `estado`) VALUES (2, 1, 186, 'Web', 'Master', 'webmaster@ecards.pe', NULL, 'webmaster', '123456', NULL, NULL, 1, 'Lima', '1980-10-25', 0, NULL, NULL, 1);
+INSERT INTO `eCards`.`usuario` (`idUsuario`, `idPerfil`, `idPais`, `nombres`, `apellidos`, `correo`, `correoAlternativo`, `usuario`, `contrasena`, `usuarioFacebook`, `contrasenaFacebook`, `genero`, `ciudad`, `fechaNacimiento`, `contadorIntentoInicio`, `fechaBloqueoTemporal`, `fechaUltimoInicio`, `estado`) VALUES (3, 3, 186, 'Usuario', 'Invitado', 'guest@ecards.pe', NULL, 'guest', '000000', NULL, NULL, 1, 'Lima', '2013-09-28', 3, NULL, NULL, 3);
+INSERT INTO `eCards`.`usuario` (`idUsuario`, `idPerfil`, `idPais`, `nombres`, `apellidos`, `correo`, `correoAlternativo`, `usuario`, `contrasena`, `usuarioFacebook`, `contrasenaFacebook`, `genero`, `ciudad`, `fechaNacimiento`, `contadorIntentoInicio`, `fechaBloqueoTemporal`, `fechaUltimoInicio`, `estado`) VALUES (4, 2, 186, 'Armando', 'Bronca Segura', 'abronca@hotmail.com', NULL, 'abronca', '123456', NULL, NULL, 1, 'Lima', '1970-10-15', 0, NULL, NULL, 1);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`tarjeta`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`tarjeta` (`idTarjeta`, `idUsuarioRegistra`, `tipoPostal`, `titulo`, `descripcion`, `etiquetaBusqueda`, `nombreFichero`, `rutaTarjeta`, `rutaMiniatura`, `genero`, `invitadoDisponible`, `fechaRegistro`, `estado`) VALUES (1, 1, 1, 'Feliz dia del Padre', 'Para alguien que merece lo mejor.', 'papa,padre,feliz dia', 'papa0025.jpg', '/media/tarjeta/imagen/papa0025.jpg', '/media/miniatura/imagen/papa0025.jpg', 1, 1, NULL, 1);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`tipo`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`tipo` (`idTipo`, `nombre`, `descripcionTipo`, `estado`) VALUES (1, 'Tipo tarjeta', 'Los diversos estatica, animada, perzonalizada, etc.', 1);
+INSERT INTO `eCards`.`tipo` (`idTipo`, `nombre`, `descripcionTipo`, `estado`) VALUES (2, 'Trato', 'Trato para el destinatario de la postal y/o contactos.', 1);
+INSERT INTO `eCards`.`tipo` (`idTipo`, `nombre`, `descripcionTipo`, `estado`) VALUES (3, 'Estado Civil', 'Los diferente estados, soltero, casado, etc.', 1);
+INSERT INTO `eCards`.`tipo` (`idTipo`, `nombre`, `descripcionTipo`, `estado`) VALUES (4, 'Tipo Relacion', 'Relacion entre el Usuario y el contacto, Amigo, familia etc.', 1);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`tipoDetalle`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (1, 1, 'Tarjeta Estatica', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (2, 1, 'Tarjeta Animada', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (3, 1, 'Tarjeta Personalizada', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (4, 2, 'Sr.', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (5, 2, 'Sra.', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (6, 2, 'Srta.', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (7, 2, 'Dr.', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (8, 2, 'Joven', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (9, 3, 'Soltero', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (10, 3, 'Enamorados', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (11, 3, 'Novios', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (12, 3, 'Casados', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (13, 4, 'Amigo(a)', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (14, 4, 'Padres', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (15, 4, 'Hermano(a)', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (16, 4, 'Tío(a)', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (17, 4, 'Primo(a)', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (18, 4, 'Compañero Trabajo', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (19, 4, 'Compañero Estudios', NULL, NULL);
+INSERT INTO `eCards`.`tipoDetalle` (`idTipoDetalle`, `idTipo`, `nombreDetalle`, `descripcionDetalle`, `estado`) VALUES (20, 4, 'Otros', NULL, NULL);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`contacto`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`contacto` (`idContacto`, `idUsuario`, `trato`, `nombre`, `apellido`, `correo`, `correoAlternativo`, `genero`, `fechaCumpleanos`, `tipoOrigen`, `tipoRelacion`, `estadoCivil`, `fechaAniversario`, `telefonoMovil`, `telefonoFijo`, `fechaRegistro`, `estado`) VALUES (1, 4, '1', 'Rosa Margarita', 'Flores Del Campo', 'rflores@hotmail.com', 'mflores@live.com', 0, '1994-05-08', 1, 1, 1, NULL, NULL, NULL, NULL, 1);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`categoriaGrupo`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`categoriaGrupo` (`idCategoriaGrupo`, `nombre`, `descripcion`, `fechaRegistro`, `estado`) VALUES (1, 'Días Festivos', 'Fechas Importantes', NULL, NULL);
+INSERT INTO `eCards`.`categoriaGrupo` (`idCategoriaGrupo`, `nombre`, `descripcion`, `fechaRegistro`, `estado`) VALUES (2, 'Felicitaciones', NULL, NULL, NULL);
+INSERT INTO `eCards`.`categoriaGrupo` (`idCategoriaGrupo`, `nombre`, `descripcion`, `fechaRegistro`, `estado`) VALUES (3, 'Trabajo', NULL, NULL, NULL);
+INSERT INTO `eCards`.`categoriaGrupo` (`idCategoriaGrupo`, `nombre`, `descripcion`, `fechaRegistro`, `estado`) VALUES (4, 'Saludos', NULL, NULL, NULL);
+INSERT INTO `eCards`.`categoriaGrupo` (`idCategoriaGrupo`, `nombre`, `descripcion`, `fechaRegistro`, `estado`) VALUES (5, 'Diversion', NULL, NULL, NULL);
+INSERT INTO `eCards`.`categoriaGrupo` (`idCategoriaGrupo`, `nombre`, `descripcion`, `fechaRegistro`, `estado`) VALUES (6, 'Sentimientos', NULL, NULL, NULL);
+INSERT INTO `eCards`.`categoriaGrupo` (`idCategoriaGrupo`, `nombre`, `descripcion`, `fechaRegistro`, `estado`) VALUES (7, 'Enamorados', NULL, NULL, NULL);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`categoria`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (1, 1, 'San Valentin', 'Para el dia de la amistad y de los enamorados', 1, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (2, 1, 'Dia de la primavera', '', 2, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (3, 1, 'Dia int. de la Mujer', '', 3, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (4, 1, 'Dia de la enfermera', '', 4, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (5, 1, 'Dia de la madre', '', 5, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (6, 1, 'Dia del padre', '', 6, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (7, 1, 'Hallowen', '', 7, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (8, 1, 'Navidad', '', 8, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (9, 1, 'Año nuevo', '', 9, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (10, 2, 'Cumpleaños', '', 1, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (11, 2, 'Bodas', '', 2, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (12, 2, 'Nacimientos', '', 3, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (13, 2, 'Festejos', '', 4, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (14, 2, 'Regalos', '', 5, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (15, 2, 'Felices Fiestas', '', 6, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (16, 2, 'Graduacion', '', 7, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (17, 2, 'Aniversario', '', 8, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (18, 3, 'Humor en la oficina', '', 1, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (19, 3, 'Despedidas', '', 2, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (20, 3, 'Reuniones Sociales', '', 3, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (21, 3, 'Trabajo y estudios', '', 4, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (22, 3, 'Logros y asesos', '', 5, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (23, 4, 'Hola', '', 1, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (24, 4, 'Besos Virtuales', '', 2, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (25, 4, 'Abrazos', '', 3, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (26, 4, 'Buenos días', '', 4, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (27, 4, 'Ánimo', '', 5, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (28, 4, 'Mejorate Pronto', '', 6, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (29, 5, 'Fiesta', '', 1, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (30, 5, 'Gastronomía', '', 2, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (31, 5, 'Vacaciones', '', 3, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (32, 5, 'Deporte', '', 4, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (33, 5, 'Fin de Semana', '', 5, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (34, 5, 'Humor', '', 6, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (35, 6, 'Familia fraternales', '', 1, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (36, 6, 'Invitacion', '', 2, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (37, 6, 'Perdon', '', 3, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (38, 6, 'Te extraño', '', 4, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (39, 6, 'Te Quiero', '', 5, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (40, 6, 'Te Odio', '', 6, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (41, 6, 'No quiero verte', '', 7, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (42, 7, 'Besos', '', 1, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (43, 7, 'Coqueteo', '', 2, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (44, 7, 'Para Ella', '', 3, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (45, 7, 'Para El', '', 4, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (46, 7, 'Cariños', '', 5, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (47, 7, 'Flores', '', 6, NULL, NULL);
+INSERT INTO `eCards`.`categoria` (`idCategoria`, `idCategoriaGrupo`, `nombreCategoria`, `descripcion`, `ordenGrupo`, `fechaRegistro`, `estado`) VALUES (48, 7, 'Romanticas', '', 7, NULL, NULL);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`parametroSistema`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`parametroSistema` (`idParametroSistema`, `nombre`, `descripcion`, `valorNum1`, `valorNum2`, `valorNum3`, `valorAlfa1`, `valorAlfa2`, `valorAlfa3`) VALUES (1, 'Tiempo Maximo(meses), Programar envio postal', 'Con cuanta anticipacion un usuario puede programar un envio.', 1, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `eCards`.`parametroSistema` (`idParametroSistema`, `nombre`, `descripcion`, `valorNum1`, `valorNum2`, `valorNum3`, `valorAlfa1`, `valorAlfa2`, `valorAlfa3`) VALUES (2, 'Numero Postales mas enviadas', 'Realizara un filtro de las postales mas enviadas LIMIT n', 6, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `eCards`.`parametroSistema` (`idParametroSistema`, `nombre`, `descripcion`, `valorNum1`, `valorNum2`, `valorNum3`, `valorAlfa1`, `valorAlfa2`, `valorAlfa3`) VALUES (3, 'Numero Postales nuevas', 'Realizara un filtro de las postales nuevas registradas LIMIT n', 3, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `eCards`.`parametroSistema` (`idParametroSistema`, `nombre`, `descripcion`, `valorNum1`, `valorNum2`, `valorNum3`, `valorAlfa1`, `valorAlfa2`, `valorAlfa3`) VALUES (4, 'Vencimiento Postales entregadas', 'Cuantos meses la postal estara disponible despues de que el remitente reviso la postal', 1, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `eCards`.`parametroSistema` (`idParametroSistema`, `nombre`, `descripcion`, `valorNum1`, `valorNum2`, `valorNum3`, `valorAlfa1`, `valorAlfa2`, `valorAlfa3`) VALUES (5, 'Tiempo para anular postales NO entregadas (nulas)', 'Despues de cuantos meses las postales No entregadas seran Descartadas.', 2, NULL, NULL, NULL, NULL, NULL);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`tarjetaCategoria`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`tarjetaCategoria` (`idTarjetaCategoria`, `idCategoria`, `idTarjeta`, `idUsuario`, `fechaRegistro`, `estado`) VALUES (1, 6, 1, 1, NULL, NULL);
+INSERT INTO `eCards`.`tarjetaCategoria` (`idTarjetaCategoria`, `idCategoria`, `idTarjeta`, `idUsuario`, `fechaRegistro`, `estado`) VALUES (2, 35, 1, 1, NULL, NULL);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `eCards`.`mensajeControlado`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `eCards`;
+INSERT INTO `eCards`.`mensajeControlado` (`idMensajeError`, `numero`, `titulo`, `descripcion`, `fechaRegistro`, `estado`) VALUES (1, 001, 'Validacion de correo', 'La direccion de correo electronico no es correcto. Por favor, ingresar una direccion valida.', NULL, NULL);
+
+COMMIT;
