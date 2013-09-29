@@ -1,0 +1,21 @@
+<head>
+{% block head %}
+    <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/backend/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/backend/css/bootstrap-responsive.min.css') }}" />
+    {% block css %} {% endblock %}
+{% endblock %}
+
+<title>{% block title 'Sitio Administrativo' %}</title>
+</head>
+<body>
+{% block body %}
+    {% block content_header %}
+    {% endblock %}    
+    {% block content %}{% endblock %}
+{% endblock %}
+<script src="{{ asset('bundles/backend/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('bundles/backend/js/jquery.min.js') }}"></script>
+{% block js %} {% endblock %}
+{% include 'SecurityBackendBundle:Includes:footer.html.twig' %}
+</body>

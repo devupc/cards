@@ -1,3 +1,4 @@
-security_backend_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: SecurityBackendBundle:Default:index }
+_admin:
+    resource: "@SecurityBackendBundle/Controller/SecuredController.php"
+    type:     annotation
+    prefix:   /admin
