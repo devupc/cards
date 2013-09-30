@@ -29,7 +29,7 @@ CREATE  TABLE IF NOT EXISTS `eCards`.`crd_permission` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(45) NOT NULL ,
   `description` VARCHAR(45) NULL ,
-  `created_at` DATETIME NOT NULL DEFAULT current_timestamp ,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `updated_at` DATETIME NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
@@ -55,7 +55,7 @@ CREATE  TABLE IF NOT EXISTS `eCards`.`crd_user` (
   `password` VARCHAR(128) NOT NULL ,
   `gender` CHAR(3) NULL ,
   `birthday` DATETIME NULL ,
-  `status` VARCHAR(3) NULL DEFAULT 'pen' ,
+  `status` TINYINT NULL DEFAULT 0 ,
   `blocked_at` DATETIME NULL ,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `updated_at` DATETIME NULL ,
@@ -91,7 +91,7 @@ CREATE  TABLE IF NOT EXISTS `eCards`.`crd_card` (
   `card path` VARCHAR(255) NULL ,
   `miniature_card_path` VARCHAR(255) NULL ,
   `gender` TINYINT(1) NULL ,
-  `status` CHAR(3) NULL DEFAULT 'act' ,
+  `status` TINYINT NULL DEFAULT 0 ,
   `available_guest` TINYINT(1) NULL DEFAULT 0 ,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
   `updated_at` DATETIME NULL ,
@@ -122,7 +122,7 @@ CREATE  TABLE IF NOT EXISTS `eCards`.`crd_card_shipping` (
   `remitter_name` VARCHAR(90) NOT NULL ,
   `remitter_email` VARCHAR(90) NOT NULL ,
   `message` TEXT NULL ,
-  `status` CHAR(3) NULL DEFAULT 0 ,
+  `status` TINYINT NULL DEFAULT 0 ,
   `shipping_at` DATETIME NULL ,
   `received_at` DATETIME NULL ,
   `expired_at` DATETIME NULL ,
@@ -188,7 +188,7 @@ CREATE  TABLE IF NOT EXISTS `eCards`.`crd_contacto` (
   `date_anniversary` DATETIME NULL ,
   `cellphone` VARCHAR(15) NULL ,
   `phone` VARCHAR(15) NULL ,
-  `status` CHAR(3) NULL DEFAULT 'act' ,
+  `status` TINYINT NULL DEFAULT 0 ,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
   `updated_at` DATETIME NULL ,
   PRIMARY KEY (`id`) ,
@@ -211,7 +211,7 @@ CREATE  TABLE IF NOT EXISTS `eCards`.`crd_group_category` (
   `name` VARCHAR(150) NOT NULL ,
   `slug` VARCHAR(150) NULL ,
   `description` VARCHAR(255) NULL ,
-  `status` CHAR(3) NULL DEFAULT 'act' ,
+  `status` TINYINT NULL DEFAULT 0 ,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `updated_at` DATETIME NULL ,
   PRIMARY KEY (`id`) )
@@ -230,7 +230,7 @@ CREATE  TABLE IF NOT EXISTS `eCards`.`crd_category` (
   `slug` VARCHAR(150) NULL ,
   `description` VARCHAR(255) NULL ,
   `order_group` TINYINT NULL DEFAULT 0 ,
-  `status` CHAR(3) NULL DEFAULT 'act' ,
+  `status` TINYINT NULL DEFAULT 0 ,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   `updated_at` DATETIME NULL ,
   PRIMARY KEY (`id`) ,
@@ -254,7 +254,7 @@ CREATE  TABLE IF NOT EXISTS `eCards`.`crd_card_category_user` (
   `user_id` INT NOT NULL ,
   `card_id` INT NOT NULL ,
   `category_id` INT NOT NULL ,
-  `status` CHAR(3) NULL DEFAULT 'act' ,
+  `status` TINYINT NULL DEFAULT 0 ,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
   `updated_at` DATETIME NULL ,
   PRIMARY KEY (`idTarjetaCategoria`) ,
@@ -304,6 +304,10 @@ DELIMITER $$
 USE `eCards`$$
 DROP TRIGGER IF EXISTS `eCards`.`tarjeta_AINS` $$
 USE `eCards`$$
+
+
+
+
 
 
 
