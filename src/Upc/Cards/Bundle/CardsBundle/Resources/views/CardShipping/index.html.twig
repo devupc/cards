@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>CardShipping list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Idusuario</th>
+                <th>Ipaddress</th>
+                <th>Recipienttreatment</th>
+                <th>Recipientname</th>
+                <th>Recipientemail</th>
+                <th>Remittername</th>
+                <th>Remitteremail</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Shippingat</th>
+                <th>Receivedat</th>
+                <th>Expiredat</th>
+                <th>Createdat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('cardshipping_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.idusuario }}</td>
+                <td>{{ entity.ipAddress }}</td>
+                <td>{{ entity.recipientTreatment }}</td>
+                <td>{{ entity.recipientName }}</td>
+                <td>{{ entity.recipientEmail }}</td>
+                <td>{{ entity.remitterName }}</td>
+                <td>{{ entity.remitterEmail }}</td>
+                <td>{{ entity.message }}</td>
+                <td>{{ entity.status }}</td>
+                <td>{% if entity.shippingAt %}{{ entity.shippingAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.receivedAt %}{{ entity.receivedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.expiredAt %}{{ entity.expiredAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('cardshipping_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% endblock %}
