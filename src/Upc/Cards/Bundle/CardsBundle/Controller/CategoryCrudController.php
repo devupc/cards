@@ -5,7 +5,7 @@ namespace Upc\Cards\Bundle\CardsBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Upc\Cards\Bundle\CardsBundle\Entity\Categoria;
+use Upc\Cards\Bundle\CardsBundle\Entity\Category;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -13,14 +13,14 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author javier olivares
  */
-class CategoriaCrudController extends Controller {
+class CategoryCrudController extends Controller {
     
     /**
      * @Route("/", name="admin_categorias_list")
      * @Template("")
      */
     public function listAction(Request $request) {
-        $form = $this->createForm('categoria_search', null);
+        $form = $this->createForm('category_search', null);
         $form->handleRequest($request);
         $criteria = $form->getData() ? $form->getData() : array();
         foreach ($criteria as $key => $value) {
@@ -29,7 +29,7 @@ class CategoriaCrudController extends Controller {
             }
         }
         $em = $this->getDoctrine()
-                ->getRepository('CardsBundle:Categoria');
+                ->getRepository('CardsBundle:Category');
         $query = $em->findBy($criteria);
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
@@ -46,8 +46,9 @@ class CategoriaCrudController extends Controller {
      * @Template("")
      */
     public function newAction(Request $request) {
-        $object = new Categoria();
-        $form = $this->createForm('categoria', $object);
+        $object = new Category();
+        $object->setCreatedAt( new \DateTime("now"));
+        $form = $this->createForm('category', $object);
         $form->handleRequest($request);
 
         if ($form->isValid()) {            
@@ -70,8 +71,8 @@ class CategoriaCrudController extends Controller {
      * @Template("")
      */
     public function editAction(Request $request, $pk) {
-        $object = $this->getDoctrine()->getRepository('CardsBundle:Categoria')->find($pk);
-        $form = $this->createForm('categoria', $object);
+        $object = $this->getDoctrine()->getRepository('CardsBundle:Category')->find($pk);
+        $form = $this->createForm('category', $object);
         $form->handleRequest($request);
 
         if ($form->isValid()) {            

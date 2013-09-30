@@ -11,19 +11,19 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  *
  * @author javier olivares
  */
-class CategoriaSearchType extends AbstractType {
+class CategorySearchType extends AbstractType {
     
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('nombrecategoria', null, array(
+        $builder->add('name', null, array(
                     'label' => 'nombre',
                     'required' => false
                 ))
-                ->add('idcategoriagrupo', 'choice', array(
+                ->add('groupCategory', 'choice', array(
                     'label' => 'Grupo',
                     'required' => false,
                     'empty_value' => '---SELECCIONE---',
                 ))
-                ->add('estado', 'choice', array(
+                ->add('status', 'choice', array(
                     'label' => 'Estado',
                     'required' => false,
                     'empty_value' => '---SELECCIONE---',
@@ -36,7 +36,7 @@ class CategoriaSearchType extends AbstractType {
     }
     
     public function getName() {
-        return 'categoria_search';
+        return 'category_search';
     }
     
      public function setDefaultOptions(OptionsResolverInterface $resolver) {

@@ -7,32 +7,32 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Description of CategoriaType
+ * Description of CategoryType
  *
  * @author javier olivares
  */
-class CategoriaType extends AbstractType {
+class CategoryType extends AbstractType {
     
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('nombrecategoria', null, array(
+        $builder->add('name', null, array(
                     'label' => 'nombre',                    
                 ))
-                ->add('ordengrupo', null, array(
+                ->add('orderGroup', null, array(
                     'label' => 'Orden',
                     'attr' => array(
                         'class' => 'span5 offset7'
                     )
                 ))
-                ->add('idcategoriagrupo', null, array(
+                ->add('groupCategory', null, array(
                     'label' => 'Grupo',
                     'empty_value' => '---SELECCIONE---',
                 ))
-                ->add('estado', 'choice', array(
+                ->add('status', 'choice', array(
                     'label' => 'Estado',
                     'empty_value' => '---SELECCIONE---',
                     'choices' => \Upc\Cards\Bundle\CardsBundle\CardsBundle::$ESTADOS
                 ))
-                ->add('descripcion', null, array(
+                ->add('description', null, array(
                     'label' => 'Descripción',
                     'attr' => array(
                         'style' => 'width:100%;',
@@ -48,12 +48,12 @@ class CategoriaType extends AbstractType {
     }
 
     public function getName() {
-        return 'categoria';
+        return 'category';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Upc\Cards\Bundle\CardsBundle\Entity\Categoria',
+            'data_class' => 'Upc\Cards\Bundle\CardsBundle\Entity\Category',
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
