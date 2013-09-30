@@ -1,6 +1,6 @@
 <?php
 
-namespace Upc\Cards\Bundle\CardsBundle\Form;
+namespace Upc\Cards\Bundle\CardsBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,16 +15,19 @@ class TarjetaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('tipopostal')
-            ->add('titulo')
-            ->add('descripcion')
-            ->add('etiquetabusqueda')
-            ->add('rutatarjeta')
-            ->add('rutaminiatura')
-            ->add('genero')
-            ->add('invitadodisponible')
-            ->add('fecharegistro')
-            ->add('estado')
+            ->add('tipopostal', null, array())
+            ->add('titulo', null, array())
+            ->add('descripcion', null, array())
+            ->add('etiquetabusqueda', null, array())
+            ->add('rutatarjeta', 'file', array())
+            ->add('rutaminiatura', 'file', array())
+            ->add('genero', null, array())
+            ->add('invitadodisponible', null, array())            
+            ->add('estado', 'choice', array(
+                'label' => 'Estado',
+                'choices' => \Upc\Cards\Bundle\CardsBundle\CardsBundle::$ESTADOS,
+                'empty_value' => '---SELECCIONE---'
+            ))
         ;
     }
     
