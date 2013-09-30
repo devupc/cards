@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
- * Upc\Cards\Bundle\SecurityBackendBundle\Entity\Usuario
+ * Upc\Cards\Bundle\SecurityBackendBundle\Entity\User
  *
- * @ORM\Table(name="backend_usuarios")
- * @ORM\Entity(repositoryClass="Upc\Cards\Bundle\SecurityBackendBundle\Repository\UsuarioRepository")
+ * @ORM\Table(name="backend_user")
+ * @ORM\Entity(repositoryClass="Upc\Cards\Bundle\SecurityBackendBundle\Repository\UserRepository")
  */
-class Usuario implements AdvancedUserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @ORM\Column(type="integer")
@@ -21,12 +21,12 @@ class Usuario implements AdvancedUserInterface, \Serializable
     private $id;
     
     /**
-     * @ORM\Column(name="nombre_completo", type="string", length=150)
+     * @ORM\Column(name="full_name", type="string", length=150)
      */
-    private $nombres;
+    private $fullName;
 
     /**
-     * @ORM\Column(name="usuario", type="string", length=25, unique=true)
+     * @ORM\Column(name="username", type="string", length=25, unique=true)
      */
     private $username;
 
@@ -36,7 +36,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
     private $salt;
 
     /**
-     * @ORM\Column(name="contrasena", type="string", length=128)
+     * @ORM\Column(name="password", type="string", length=128)
      */
     private $password;
 
@@ -113,9 +113,9 @@ class Usuario implements AdvancedUserInterface, \Serializable
      * @param string $nombres
      * @return Usuarios
      */
-    public function setNombres($nombres)
+    public function setFullName($fullName)
     {
-        $this->nombres = $nombres;
+        $this->fullName = $fullName;
     
         return $this;
     }
@@ -125,9 +125,9 @@ class Usuario implements AdvancedUserInterface, \Serializable
      *
      * @return string 
      */
-    public function getNombres()
+    public function getFullName()
     {
-        return $this->nombres;
+        return $this->fullName;
     }
 
     /**
