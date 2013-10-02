@@ -3,15 +3,18 @@
 namespace Upc\Cards\Bundle\CardsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CrdCard
  *
  * @ORM\Table(name="crd_card")
  * @ORM\Entity(repositoryClass="Upc\Cards\Bundle\CardsBundle\Repository\CardRepository")
+ * @ORM\HasLifecycleCallbacks
  */
-class Card
-{
+class Card {
+
     /**
      * @var integer
      *
@@ -31,7 +34,7 @@ class Card
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=254, nullable=false)
+     * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $description;
 
@@ -54,7 +57,7 @@ class Card
      *
      * @ORM\Column(name="name_file", type="string", length=30, nullable=true)
      */
-    private $file;
+    private $filename;
 
     /**
      * @var string
@@ -108,7 +111,7 @@ class Card
      */
     private $user;
 
-    public function getEstadoDisplay(){
+    public function getEstadoDisplay() {
         return \Upc\Cards\Bundle\CardsBundle\CardsBundle::$ESTADOS[$this->getStatus()];
     }
 
@@ -117,8 +120,7 @@ class Card
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -128,10 +130,9 @@ class Card
      * @param string $title
      * @return Card
      */
-    public function setTitle($title)
-    {
+    public function setTitle($title) {
         $this->title = $title;
-    
+
         return $this;
     }
 
@@ -140,8 +141,7 @@ class Card
      *
      * @return string 
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
@@ -151,10 +151,9 @@ class Card
      * @param string $description
      * @return Card
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -163,8 +162,7 @@ class Card
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -174,10 +172,9 @@ class Card
      * @param integer $postalType
      * @return Card
      */
-    public function setPostalType($postalType)
-    {
+    public function setPostalType($postalType) {
         $this->postalType = $postalType;
-    
+
         return $this;
     }
 
@@ -186,8 +183,7 @@ class Card
      *
      * @return integer 
      */
-    public function getPostalType()
-    {
+    public function getPostalType() {
         return $this->postalType;
     }
 
@@ -197,10 +193,9 @@ class Card
      * @param string $keywords
      * @return Card
      */
-    public function setKeywords($keywords)
-    {
+    public function setKeywords($keywords) {
         $this->keywords = $keywords;
-    
+
         return $this;
     }
 
@@ -209,8 +204,7 @@ class Card
      *
      * @return string 
      */
-    public function getKeywords()
-    {
+    public function getKeywords() {
         return $this->keywords;
     }
 
@@ -220,10 +214,9 @@ class Card
      * @param string $file
      * @return Card
      */
-    public function setFile($file)
-    {
-        $this->file = $file;
-    
+    public function setFilename($filename) {
+        $this->filename = $file;
+
         return $this;
     }
 
@@ -232,9 +225,8 @@ class Card
      *
      * @return string 
      */
-    public function getFile()
-    {
-        return $this->file;
+    public function getFilename() {
+        return $this->filename;
     }
 
     /**
@@ -243,10 +235,9 @@ class Card
      * @param string $cardPath
      * @return Card
      */
-    public function setCardPath($cardPath)
-    {
-        $this->cardPath = $path;
-    
+    public function setCardPath($cardPath) {
+        $this->cardPath = $cardPath;
+
         return $this;
     }
 
@@ -255,8 +246,7 @@ class Card
      *
      * @return string 
      */
-    public function getCardPath()
-    {
+    public function getCardPath() {
         return $this->cardPath;
     }
 
@@ -266,10 +256,9 @@ class Card
      * @param boolean $gender
      * @return Card
      */
-    public function setGender($gender)
-    {
+    public function setGender($gender) {
         $this->gender = $gender;
-    
+
         return $this;
     }
 
@@ -278,8 +267,7 @@ class Card
      *
      * @return boolean 
      */
-    public function getGender()
-    {
+    public function getGender() {
         return $this->gender;
     }
 
@@ -289,10 +277,9 @@ class Card
      * @param integer $status
      * @return Card
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
-    
+
         return $this;
     }
 
@@ -301,8 +288,7 @@ class Card
      *
      * @return integer 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -312,10 +298,9 @@ class Card
      * @param boolean $availableGuest
      * @return Card
      */
-    public function setAvailableGuest($availableGuest)
-    {
+    public function setAvailableGuest($availableGuest) {
         $this->availableGuest = $availableGuest;
-    
+
         return $this;
     }
 
@@ -324,8 +309,7 @@ class Card
      *
      * @return boolean 
      */
-    public function getAvailableGuest()
-    {
+    public function getAvailableGuest() {
         return $this->availableGuest;
     }
 
@@ -335,10 +319,9 @@ class Card
      * @param \DateTime $createdAt
      * @return Card
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
@@ -347,8 +330,7 @@ class Card
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -358,10 +340,9 @@ class Card
      * @param \DateTime $updatedAt
      * @return Card
      */
-    public function setUpdatedAt($updatedAt)
-    {
+    public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
@@ -370,8 +351,7 @@ class Card
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -381,10 +361,9 @@ class Card
      * @param \Upc\Cards\Bundle\CardsBundle\Entity\User $user
      * @return Card
      */
-    public function setUser(\Upc\Cards\Bundle\CardsBundle\Entity\User $user = null)
-    {
+    public function setUser(\Upc\Cards\Bundle\CardsBundle\Entity\User $user = null) {
         $this->user = $user;
-    
+
         return $this;
     }
 
@@ -393,10 +372,124 @@ class Card
      *
      * @return \Upc\Cards\Bundle\CardsBundle\Entity\User 
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->user;
     }
+
+    public function getStatusDisplay() {
+        return \Upc\Cards\Bundle\CardsBundle\CardsBundle::$ESTADOS[$this->getStatus()];
+    }
+
+    /*     * *********************ABOUT THE FILE************************ */
+
+    public function getAbsolutePath() {
+        return null === $this->cardPath ? null : $this->getUploadRootDir() . '/' . $this->cardPath;
+    }
     
-    
+    public function getFullWebPath() {
+        return null === $this->cardPath ? null : $this->getUploadDir() . '/' . $this->cardPath;
+    }
+
+    public function getWebPath() {
+        return null === $this->cardPath ? null : $this->getUploadDir() . '/' . $this->cardPath;
+    }
+
+    private $root;
+
+    protected function getUploadRootDir() {
+        // the absolute directory path where uploaded
+        // documents should be saved
+
+        echo 'CHDIR' . $this->root . '<br>';
+        return $this->root.$this->getUploadDir();
+    }
+
+    public function setRootDir($root) {
+        $this->root = $root;
+    }
+
+    protected function getUploadDir() {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/documents';
+    }
+
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $file;
+    private $temp;
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null) {
+        $this->file = $file;
+        // check if we have an old image path
+        if (isset($this->cardPath)) {
+            // store the old name to delete after the update
+            $this->temp = $this->cardPath;
+            $this->cardPath = null;
+        } else {
+            $this->cardPath = 'initial';
+        }
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile() {
+        return $this->file;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload() {
+        if (null !== $this->getFile()) {
+            // do whatever you want to generate a unique name
+            $filename = sha1(uniqid(mt_rand(), true));
+            $this->cardPath = $filename . '.' . $this->getFile()->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload() {
+        if (null === $this->getFile()) {
+            return;
+        }
+        echo 'DESTINO'.$this->getUploadRootDir() . '<br>';
+        echo $this->getUploadRootDir();
+        // if there is an error when moving the file, an exception will
+        // be automatically thrown by move(). This will properly prevent
+        // the entity from being persisted to the database on error
+        $this->getFile()->move($this->getUploadRootDir(), $this->cardPath);
+
+        // check if we have an old image
+        if (isset($this->temp)) {
+            // delete the old image
+            unlink($this->getUploadRootDir() . '/' . $this->temp);
+            // clear the temp image path
+            $this->temp = null;
+        }
+        $this->file = null;
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload() {
+        if ($this->file == $this->getAbsolutePath()) {
+            unlink($this->file);
+        }
+    }
+
 }

@@ -10,4 +10,13 @@ class HomeController extends Controller
     {
         return $this->render('CardsBundle:Home:index.html.twig');
     }
+    /**
+     * 
+     * @Route("/categories/", name="_categories")
+     * @Template("CardsBundle:Home:categories.html.twig")
+     */
+    public function categoriesAction()
+    {
+        return array();
+    }
 }

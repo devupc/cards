@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Upc\Cards\Bundle\SecurityBackendBundle\Entity\Usuario;
+use Upc\Cards\Bundle\SecurityBackendBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -22,11 +22,11 @@ class SecuredController extends Controller
     public function adduserAction()
     {
         $factory = $this->get('security.encoder_factory');
-        $user = new Usuario();
+        $user = new User();
         $encoder = $factory->getEncoder($user);
         $password = $encoder->encodePassword('admin', $user->getSalt());
         $user->setPassword($password);
-        $user->setNombres("admin admin");
+        $user->setFullName("Administrador");
         $user->setUsername("admin");
         $user->setEmail("example@example.com");
         
