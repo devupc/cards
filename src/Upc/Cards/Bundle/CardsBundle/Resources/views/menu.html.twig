@@ -10,7 +10,10 @@
                 <a class="brand" href="#">Halcon Postales</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li class="active"><a href="#categorias">Categorias</a></li>
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Categorias<strong class="caret"></strong></a>
+                            {% include "CardsBundle:CategoryCrud:categoriesHome.html.twig" with { 'groupCategories': groupCategories } %}
+                        </li>
                         <li><a href="#novedades">Novedades</a></li>
                         <li><a href="#comentarios">Comentarios</a></li>
                     </ul>

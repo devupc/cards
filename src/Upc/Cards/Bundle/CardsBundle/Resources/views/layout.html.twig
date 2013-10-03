@@ -15,8 +15,7 @@
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
         <link href="{{ asset('bundles/frontend/css/global.css') }}" rel="stylesheet">
     </head>
-    <body>
-        {% include "CardsBundle::menu.html.twig" %}
+    <body>        
         {% block content %} {% endblock %}
         <script src="{{ asset('bundles/frontend/js/jquery.js') }}"></script>
         <script src="{{ asset('bundles/frontend/js/bootstrap.min.js') }}"></script>

@@ -1,5 +1,6 @@
 {% extends 'CardsBundle::layout.html.twig' %}
 {% block content %}
+    {% include "CardsBundle::menu.html.twig" with { 'groupCategories': groupCategories } %}
     {% include "CardsBundle:Home:carousel.html.twig" %}
     <div class="container marketing">
         {% include "CardsBundle:Home:container.html.twig" %}

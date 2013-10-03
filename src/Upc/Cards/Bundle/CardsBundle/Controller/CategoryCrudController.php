@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CategoryCrudController extends Controller {
     
+    
+    
     /**
      * @Route("/", name="admin_categorias_list")
      * @Template("")

@@ -1,0 +1,10 @@
+<ul class="dropdown-menu">
+    {% for groupCategory in groupCategories %}
+        <li class="nav-header">{{groupCategory.name}}</li>
+        {% for category in groupCategory.categories %}
+        <li><a href="#">{{category.name}}</a></li>
+        {% endfor%}
+    {% else %}            
+            
+    {% endfor %}
+</ul>

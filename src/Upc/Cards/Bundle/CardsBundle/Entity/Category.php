@@ -71,12 +71,8 @@ class Category
     private $updatedAt;
 
     /**
-     * @var \CrdGroupCategory
-     *
      * @ORM\ManyToOne(targetEntity="GroupCategory")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="group_category_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="group_category_id", referencedColumnName="id")
      */
     private $groupCategory;
 

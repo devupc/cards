@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="crd_group_category")
  * @ORM\Entity(repositoryClass="Upc\Cards\Bundle\CardsBundle\Repository\GroupCategoryRepository")
  */
-class GroupCategory
-{
+class GroupCategory {
+
     /**
      * @var integer
      *
@@ -63,15 +63,23 @@ class GroupCategory
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="groupCategory")
+     */
+    protected $categories;
 
+    public function __construct() {
+        $this->categories = new ArrayCollection();
+        $this->setCreated(new \DateTime());
+        $this->setUpdated(new \DateTime());
+    }
 
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -81,10 +89,9 @@ class GroupCategory
      * @param string $name
      * @return CrdGroupCategory
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -93,8 +100,7 @@ class GroupCategory
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -104,10 +110,9 @@ class GroupCategory
      * @param string $slug
      * @return CrdGroupCategory
      */
-    public function setSlug($slug)
-    {
+    public function setSlug($slug) {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
@@ -116,8 +121,7 @@ class GroupCategory
      *
      * @return string 
      */
-    public function getSlug()
-    {
+    public function getSlug() {
         return $this->slug;
     }
 
@@ -127,10 +131,9 @@ class GroupCategory
      * @param string $description
      * @return CrdGroupCategory
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -139,8 +142,7 @@ class GroupCategory
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -150,10 +152,9 @@ class GroupCategory
      * @param string $status
      * @return CrdGroupCategory
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
-    
+
         return $this;
     }
 
@@ -162,8 +163,7 @@ class GroupCategory
      *
      * @return string 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -173,10 +173,9 @@ class GroupCategory
      * @param \DateTime $createdAt
      * @return CrdGroupCategory
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
@@ -185,8 +184,7 @@ class GroupCategory
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -196,10 +194,9 @@ class GroupCategory
      * @param \DateTime $updatedAt
      * @return CrdGroupCategory
      */
-    public function setUpdatedAt($updatedAt)
-    {
+    public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
@@ -208,8 +205,12 @@ class GroupCategory
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
+
+    public function getCategories() {
+        return $this->categories;
+    }
+
 }
