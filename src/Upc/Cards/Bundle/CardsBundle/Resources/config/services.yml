@@ -10,3 +10,11 @@ services:
         class: Upc\Cards\Bundle\CardsBundle\Form\Type\CategorySearchType
         tags:
             - { name: form.type, alias: category_search }
+    cards_crud.form.type.card:
+        class: Upc\Cards\Bundle\CardsBundle\Form\Type\CardType
+        tags:
+            - { name: form.type, alias: card }            
+    cards_crud.form.type.card_search:
+        class: Upc\Cards\Bundle\CardsBundle\Form\Type\CardSearchType
+        tags:
+            - { name: form.type, alias: card_search }

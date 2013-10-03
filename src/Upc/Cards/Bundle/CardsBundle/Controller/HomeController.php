@@ -11,15 +11,17 @@ class HomeController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
 
         $groupCategories = $em->getRepository('CardsBundle:GroupCategory')->getCategoriesHome();
-        
-        
-//        echo "<pre>";
-//        
-//        print_r($groupCategories);
-//        echo "</pre>";
-//        die();
 
         return $this->render('CardsBundle:Home:index.html.twig', array('groupCategories' => $groupCategories));
+    }
+
+    /**
+     * 
+     * @Route("/categories/", name="_categories")
+     * @Template("CardsBundle:Home:categories.html.twig")
+     */
+    public function categoriesAction() {
+        return array();
     }
 
 }
