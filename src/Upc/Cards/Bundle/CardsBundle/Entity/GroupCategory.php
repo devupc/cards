@@ -213,4 +213,27 @@ class GroupCategory {
         return $this->categories;
     }
 
+
+    /**
+     * Add categories
+     *
+     * @param \Upc\Cards\Bundle\CardsBundle\Entity\Category $categories
+     * @return GroupCategory
+     */
+    public function addCategorie(\Upc\Cards\Bundle\CardsBundle\Entity\Category $categories)
+    {
+        $this->categories[] = $categories;
+    
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Upc\Cards\Bundle\CardsBundle\Entity\Category $categories
+     */
+    public function removeCategorie(\Upc\Cards\Bundle\CardsBundle\Entity\Category $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
 }

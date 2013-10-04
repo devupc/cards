@@ -12,7 +12,15 @@ class HomeController extends Controller {
 
         $groupCategories = $em->getRepository('CardsBundle:GroupCategory')->getCategoriesHome();
 
-        return $this->render('CardsBundle:Home:index.html.twig', array('groupCategories' => $groupCategories));
+        $cardsCategories = $em->getRepository('CardsBundle:CardCategoryUser')->getCardByUserId();        
+        
+        $array_cards_categories = array();
+        foreach ($cardsCategories as $cardCategory) {
+            $array_cards_categories[$cardCategory['category']['id']]['name'] = $cardCategory['category']['name'];
+            $array_cards_categories[$cardCategory['category']['id']]['cards'][] = array('id' => $cardCategory['card']['id'], 'name' => $cardCategory['card']['title'], 'filename' => $cardCategory['card']['filename']);
+        }
+
+        return $this->render('CardsBundle:Home:index.html.twig', array('groupCategories' => $groupCategories, 'cardsCategories' => $array_cards_categories));
     }
 
     /**
