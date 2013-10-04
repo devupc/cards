@@ -12,4 +12,25 @@ use Doctrine\ORM\EntityRepository;
  */
 class CardCategoryUserRepository extends EntityRepository
 {
+    
+        public function getCardByUserId($user = null) {
+            
+            
+                    $qb = $this->createQueryBuilder('cu')
+                ->select('c, cr')
+                ->innerJoin('cg.categories', 'c')
+                ->where('cg.status = :c_status')
+                ->andWhere('c.status = :c_status')
+                ->setParameter('c_status', $status);
+
+        return $qb->getQuery()->getResult();
+        }
+    
+    
+    
+//    SELECT * FROM crd_card_category_user cu
+//inner JOIN crd_category c on c.id = cu.category_id
+//inner JOIN crd_card cr on cu.card_id = cr.id
+//where c.`status` = 1 and cr.`status` = 1
+
 }

@@ -18,7 +18,7 @@ class GroupCategoryRepository extends EntityRepository {
 
         $qb = $this->createQueryBuilder('cg')
                 ->select('cg, c')
-                ->leftJoin('cg.categories', 'c')
+                ->innerJoin('cg.categories', 'c')
                 ->where('cg.status = :c_status')
                 ->andWhere('c.status = :c_status')
                 ->setParameter('c_status', $status);;
