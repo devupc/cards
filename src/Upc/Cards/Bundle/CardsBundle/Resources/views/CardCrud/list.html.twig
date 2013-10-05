@@ -67,6 +67,8 @@
                         <td>
                             <a href="{{ path('admin_tarjetas_edit', {'pk': item.id}) }}" title="Editar">
                                 <i class="icon-edit"></i> </a>
+                            <a href="{{ path('admin_tarjetas_delete', {'pk': item.id}) }}" title="Eliminar">
+                                <i class="icon-trash"></i> </a>
                         </td>
                     </tr>
                 {% endfor %}

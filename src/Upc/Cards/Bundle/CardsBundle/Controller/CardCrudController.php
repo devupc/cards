@@ -101,4 +101,30 @@ class CardCrudController extends Controller
             'form' => $form->createView()
         );
     }
+    
+    /**
+     * @Route("/delete/{pk}", name="admin_tarjetas_delete")
+     * @Template("")
+     */
+    public function deleteAction(Request $request, $pk) {
+        $object = $this->getDoctrine()->getRepository('CardsBundle:Card')->find($pk);        
+        if (!$object) {
+            $this->createNotFoundException('No existe la categoria');
+        }
+        $cats = $this->getDoctrine()->getRepository('CardsBundle:CardCategoryUser')->findBy(
+                array('card' => $object));
+        $em = $this->getDoctrine()->getManager();
+        foreach ($cats as $value) {
+            $em->remove($value);
+        }
+        $em->flush();
+        $em->remove($object);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+        'card',
+        'Registro eliminado satisfactoriamente'
+        );
+        $nextAction = 'admin_tarjetas_list';
+        return $this->redirect($this->generateUrl($nextAction));
+    }
 }
