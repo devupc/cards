@@ -18,10 +18,11 @@ class CategorySearchType extends AbstractType {
                     'label' => 'nombre',
                     'required' => false
                 ))
-                ->add('groupCategory', 'choice', array(
+                ->add('groupCategory', 'entity', array(
                     'label' => 'Grupo',
                     'required' => false,
                     'empty_value' => '---SELECCIONE---',
+                    'class' => 'CardsBundle:GroupCategory'
                 ))
                 ->add('status', 'choice', array(
                     'label' => 'Estado',
