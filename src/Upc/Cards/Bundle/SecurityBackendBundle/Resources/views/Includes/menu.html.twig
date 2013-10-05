@@ -12,6 +12,9 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categoria <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li><a href="{{ path('admin_gcategorias_add') }}">Nueva Grupo Categoria</a></li>
+                            <li><a href="{{ path('admin_gcategorias_list') }}">Consultar Grupo Categoria</a></li>
+                            <li class="divider"></li>
                             <li><a href="{{ path('admin_categorias_add') }}">Nueva Categoria</a></li>
                             <li><a href="{{ path('admin_categorias_list') }}">Consultar Categoria</a></li>
                         </ul>
@@ -42,4 +45,3 @@
         </div>
     </div><!-- /navbar-inner -->
 </div>
-<a href="#" class="btn" data-toggle="popover" data-placement="bottom" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." title="" data-original-title="Popover on bottom">Popover on bottom</a>

@@ -17,7 +17,7 @@ class HomeController extends Controller {
         $array_cards_categories = array();
         foreach ($cardsCategories as $cardCategory) {
             $array_cards_categories[$cardCategory['category']['id']]['name'] = $cardCategory['category']['name'];
-            $array_cards_categories[$cardCategory['category']['id']]['cards'][] = array('id' => $cardCategory['card']['id'], 'name' => $cardCategory['card']['title'], 'filename' => $cardCategory['card']['filename']);
+            $array_cards_categories[$cardCategory['category']['id']]['cards'][] = array('id' => $cardCategory['card']['id'], 'name' => $cardCategory['card']['title'], 'filename' => $cardCategory['card']['cardPath']);
         }
 
         return $this->render('CardsBundle:Home:index.html.twig', array('groupCategories' => $groupCategories, 'cardsCategories' => $array_cards_categories));

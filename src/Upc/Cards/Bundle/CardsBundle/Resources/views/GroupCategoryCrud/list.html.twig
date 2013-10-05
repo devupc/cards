@@ -1,0 +1,80 @@
+{% extends 'SecurityBackendBundle:Secured:index.html.twig' %}
+{% block content %}
+<ul id="myTab" class="nav nav-tabs">
+    <li><a href="{{ path('admin_gcategorias_add') }}" >Agregar</a></li>
+    <li class="active"><a href="{{ path('admin_gcategorias_list') }}" >Consultar</a></li>
+</ul>
+<div id="tabContenido" class="tab-content">
+    <div class="tab-pane fade active in" id="new">
+    <div class="modal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Consultar Grupo de Categoria</h3>
+        </div>
+        <div class="modal-body">
+        {% for flashMessage in app.session.flashbag.get('gcategoria') %}
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+            <div class="row-fluid">
+                <div class="span1">
+                    {{ form_label(form.name) }}                    
+                </div>
+                <div class="span3">
+                    {{ form_errors(form.name) }}
+                    {{ form_widget(form.name) }}
+                </div>
+                <div class="span1">
+                    {{ form_label(form.status) }}
+                </div>
+                <div class="span3">
+                    {{ form_errors(form.status) }}
+                    {{ form_widget(form.status) }}
+                </div>
+                <div class="span1">
+                    {{ form_widget(form.search) }}
+                </div>
+            </div>
+        {{ form_end(form) }}
+            <br>
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Nombre</th>
+                        <th>Slug</th>                        
+                        <th>Estado</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in pagination %}
+                    <tr {% if loop.index is odd %}class="info"{% endif %}>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.slug }}</td>
+                        <td>{{ item.getStatusDisplay }}</td>
+                        <td>
+                            <a href="{{ path('admin_gcategorias_edit', {'pk': item.id}) }}" title="Editar">
+                                <i class="icon-edit"></i> </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+            <div class="modal-footer">
+                <a href="#" class="btn">Cerrar</a>
+            </div>            
+        </div>
+    </div>
+</div>
+{% endblock %}
+              

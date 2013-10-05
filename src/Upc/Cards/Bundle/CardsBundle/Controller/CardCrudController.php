@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Upc\Cards\Bundle\CardsBundle\Entity\Card;
-
+use Upc\Cards\Bundle\CardsBundle\Entity\CardCategoryUser;
 
 /**
  * Tarjeta controller.
@@ -57,6 +57,15 @@ class CardCrudController extends Controller
             $object->setRootDir( str_replace('/cards/app', $this->getRequest()->getBasePath(),  $this->get('kernel')->getRootDir()).'/' );
             $em->persist($object);
             $em->flush();
+            foreach ($object->getCategories() as $category) {
+                $catcard = new CardCategoryUser();
+                $catcard->setCard($object)
+                        ->setCategory($category)
+                        ->setStatus($object->getStatus())
+                        ->setCreatedAt($object->getCreatedAt());
+                $em->persist($catcard);
+                $em->flush();
+            }
             $this->get('session')->getFlashBag()->add(
             'card',
             'Registro grabado satisfactoriamente'

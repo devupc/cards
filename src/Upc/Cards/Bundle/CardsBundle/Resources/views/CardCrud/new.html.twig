@@ -79,9 +79,16 @@
                 <div class="span1">
                     {{ form_label(form.description) }}
                 </div>
-                <div class="span8">
+                <div class="span3">
                     {{ form_errors(form.description) }}
                     {{ form_widget(form.description) }}
+                </div>
+                <div class="span1">
+                    {{ form_label(form.categories) }}
+                </div>
+                <div class="span5">
+                    {{ form_errors(form.categories) }}
+                    {{ form_widget(form.categories) }}
                 </div>
             </div>    
         </div>

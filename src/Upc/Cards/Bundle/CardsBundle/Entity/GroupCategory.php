@@ -3,6 +3,7 @@
 namespace Upc\Cards\Bundle\CardsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * CrdGroupCategory
@@ -70,8 +71,8 @@ class GroupCategory {
 
     public function __construct() {
         $this->categories = new ArrayCollection();
-        $this->setCreated(new \DateTime());
-        $this->setUpdated(new \DateTime());
+//        $this->setCreated(new \DateTime());
+//        $this->setUpdated(new \DateTime());
     }
 
     /**
@@ -95,6 +96,14 @@ class GroupCategory {
         return $this;
     }
 
+     public function getStatusDisplay(){
+        return \Upc\Cards\Bundle\CardsBundle\CardsBundle::$ESTADOS[$this->getStatus()];
+    }
+    
+    public function __toString() {
+        return $this->getName();
+    }
+    
     /**
      * Get name
      *

@@ -10,3 +10,7 @@ _admin_categorias:
     resource: "@CardsBundle/Controller/CategoryCrudController.php"
     type:     annotation
     prefix:   /admin/categorias
+_admin_gcategorias:
+    resource: "@CardsBundle/Controller/GroupCategoryCrudController.php"
+    type:     annotation
+    prefix:   /admin/gruposcategorias

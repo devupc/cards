@@ -20,9 +20,12 @@ class CardType extends AbstractType {
                 ->add('description', null, array())
                 ->add('postalType', null, array())
                 ->add('keywords', null, array())
-                
                 ->add('availableGuest', null, array())
                 ->add('gender', null, array())
+                ->add('categories', 'entity', array(
+                    'class' => 'CardsBundle:Category',
+                    'multiple' => true
+                ))
                 ->add('status', 'choice', array(
                     'label' => 'Estado',
                     'choices' => \Upc\Cards\Bundle\CardsBundle\CardsBundle::$ESTADOS,

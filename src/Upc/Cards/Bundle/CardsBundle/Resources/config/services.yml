@@ -18,3 +18,11 @@ services:
         class: Upc\Cards\Bundle\CardsBundle\Form\Type\CardSearchType
         tags:
             - { name: form.type, alias: card_search }
+    cards_crud.form.type.group_category:
+        class: Upc\Cards\Bundle\CardsBundle\Form\Type\GroupCategoryType
+        tags:
+            - { name: form.type, alias: group_category }
+    cards_crud.form.type.gcategory_search:
+        class: Upc\Cards\Bundle\CardsBundle\Form\Type\GroupCategorySearchType
+        tags:
+            - { name: form.type, alias: gcategory_search }

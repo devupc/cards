@@ -76,6 +76,10 @@ class Category
      */
     private $groupCategory;
 
+    public function __toString() {
+        return $this->getName();
+    }
+    
     public function getStatusDisplay(){
         return \Upc\Cards\Bundle\CardsBundle\CardsBundle::$ESTADOS[$this->getStatus()];
     }

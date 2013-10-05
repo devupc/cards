@@ -1,0 +1,66 @@
+{% extends 'SecurityBackendBundle:Secured:index.html.twig' %}
+{% block content %}
+<ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a href="{{ path('admin_gcategorias_add') }}" >Agregar</a></li>
+    <li class=""><a href="{{ path('admin_gcategorias_list') }}" >Consultar</a></li>
+</ul>
+<div id="tabContenido" class="tab-content">
+    <div class="tab-pane fade active in" id="new">                
+    {{ form_start(form) }}
+    <div class="modal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Registrar Grupo de Categoria</h3>
+        </div>
+        <div class="modal-body">
+        {% for flashMessage in app.session.flashbag.get('gcategoria') %}
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+        {{ form_errors(form) }}
+        <div class="row-fluid">
+                <div class="span1">
+                    {{ form_label(form.name) }}                    
+                </div>
+                <div class="span3">
+                    {{ form_errors(form.name) }}
+                    {{ form_widget(form.name) }}
+                </div>
+                <div class="span1">
+                    {{ form_label(form.slug) }}                    
+                </div>
+                <div class="span2">
+                    {{ form_errors(form.slug) }}
+                    {{ form_widget(form.slug) }}
+                </div>
+            </div>
+            <div class="row-fluid">                
+                <div class="span1">
+                    {{ form_label(form.status) }}                    
+                </div>
+                <div class="span3">
+                    {{ form_errors(form.status) }}
+                    {{ form_widget(form.status) }}
+                </div>
+                <div class="span1">
+                    {{ form_label(form.description) }}
+                </div>
+                <div class="span5">
+                    {{ form_errors(form.description) }}
+                    {{ form_widget(form.description) }}
+                </div>    
+            </div>
+        </div>
+            <div class="modal-footer">
+                {{ form_widget(form.save) }}
+                {{ form_widget(form.saveAndAdd) }}
+                <a href="#" class="btn">Cerrar</a>
+            </div>            
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+              

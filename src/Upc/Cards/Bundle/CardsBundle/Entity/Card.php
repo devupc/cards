@@ -110,6 +110,13 @@ class Card {
      * })
      */
     private $user;
+    
+    /**
+     * @var \CrdUser
+     *
+     *    
+     */
+    private $categories;
 
     public function getEstadoDisplay() {
         return \Upc\Cards\Bundle\CardsBundle\CardsBundle::$ESTADOS[$this->getStatus()];
@@ -492,4 +499,44 @@ class Card {
         }
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add categories
+     *
+     * @param \Upc\Cards\Bundle\CardsBundle\Entity\Category $categories
+     * @return Card
+     */
+    public function addCategory(\Upc\Cards\Bundle\CardsBundle\Entity\Category $categories)
+    {
+        $this->categories[] = $categories;
+    
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Upc\Cards\Bundle\CardsBundle\Entity\Category $categories
+     */
+    public function removeCategory(\Upc\Cards\Bundle\CardsBundle\Entity\Category $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
 }
