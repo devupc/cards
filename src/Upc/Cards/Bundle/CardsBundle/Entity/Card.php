@@ -407,7 +407,7 @@ class Card {
         // the absolute directory path where uploaded
         // documents should be saved
 
-        echo 'CHDIR' . $this->root . '<br>';
+       // echo 'CHDIR' . $this->root . '<br>';
         return $this->root.$this->getUploadDir();
     }
 

@@ -16,7 +16,7 @@ class SecuredController extends Controller
     
     
     /**
-     * @Route("/user/add", name="_add_user")
+     * @Route("/user/add", name="_admin_add_user")
      * @Template()
      */
     public function adduserAction()

@@ -2,25 +2,32 @@
 
 namespace Upc\Cards\Bundle\CardsBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class HomeController extends Controller {
 
-    public function indexAction() {
+    /**
+     * @Route("/", name="cards_homepage_home")
+     * @Template()
+     */
+    public function homeAction(Request $request) {
 
         $em = $this->getDoctrine()->getEntityManager();
 
         $groupCategories = $em->getRepository('CardsBundle:GroupCategory')->getCategoriesHome();
 
-        $cardsCategories = $em->getRepository('CardsBundle:CardCategoryUser')->getCardByUserId();        
-        
+        $cardsCategories = $em->getRepository('CardsBundle:CardCategoryUser')->getCardByUserId();
+
         $array_cards_categories = array();
         foreach ($cardsCategories as $cardCategory) {
-            $array_cards_categories[$cardCategory['category']['id']]['name'] = $cardCategory['category']['name'];
-            $array_cards_categories[$cardCategory['category']['id']]['cards'][] = array('id' => $cardCategory['card']['id'], 'name' => $cardCategory['card']['title'], 'filename' => $cardCategory['card']['cardPath']);
+            $array_cards_categories[$cardCategory->getCategory()->getId()]['name'] = $cardCategory->getCategory()->getName();
+            $array_cards_categories[$cardCategory->getCategory()->getId()]['cards'][] = array('id' => $cardCategory->getCard()->getId(), 'name' => $cardCategory->getCard()->getTitle(), 'filename' => $cardCategory->getCard()->getAbsolutePath());
         }
 
-        return $this->render('CardsBundle:Home:index.html.twig', array('groupCategories' => $groupCategories, 'cardsCategories' => $array_cards_categories));
+        return array('groupCategories' => $groupCategories, 'cardsCategories' => $array_cards_categories);
     }
 
     /**

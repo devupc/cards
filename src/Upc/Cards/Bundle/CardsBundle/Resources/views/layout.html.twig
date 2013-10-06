@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="es">
+{% block head %}
     <head>
         <meta charset="utf-8">
         <title>Halcon Postales</title>
@@ -14,23 +14,25 @@
         <![endif]-->
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
         <link href="{{ asset('bundles/frontend/css/global.css') }}" rel="stylesheet">
+        {% block css %} {% endblock %}
     </head>
-    <body>        
-        {% block content %} {% endblock %}
+{% endblock %}
+    <body>
+        {% block body %} {% endblock %}
         <script src="{{ asset('bundles/frontend/js/jquery.js') }}"></script>
         <script src="{{ asset('bundles/frontend/js/bootstrap.min.js') }}"></script>
-    <script>
-        !function($) {
-            $(function() {
-                // carousel demo
-                $('#carousel_home').carousel();
-                
-                	$('#myCarousel').carousel({
-interval: 10000
-})
-            });
-        }(window.jQuery);
+        <script>
+            !function($) {
+                $(function() {
+                    // carousel demo
+                    $('#carousel_home').carousel();
+
+                    $('#myCarousel').carousel({
+                        interval: 10000
+                    })
+                });
+            }(window.jQuery);
         </script>
         <script src="{{ asset('bundles/frontend/js/holder.js') }}"></script>
+        {% block js %} {% endblock %}
     </body>
-        </html>

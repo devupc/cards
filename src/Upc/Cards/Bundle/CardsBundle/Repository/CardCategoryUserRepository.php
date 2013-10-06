@@ -24,7 +24,7 @@ class CardCategoryUserRepository extends EntityRepository {
                 ->andWhere('cu.status = :c_status')
                 ->setParameter('c_status', $status);
 
-        return $qb->getQuery()->getArrayResult();
+        return $qb->getQuery()->getResult();
     }
 
 }

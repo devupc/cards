@@ -1,0 +1,12 @@
+{% extends 'CardsBundle::layout.html.twig' %}
+{% block body %}
+    {% include "CardsBundle:Includes:menu.html.twig"  %}
+    <div id="wrapper_container">
+        {% block content %}{% endblock %}
+        <div class ="container">
+            <hr class="featurette-divider">
+        {% include "CardsBundle:Includes:footer.html.twig" %}
+        </div>
+    </div>
+
+{% endblock %}
