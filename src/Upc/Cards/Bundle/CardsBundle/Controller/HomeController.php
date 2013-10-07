@@ -27,7 +27,7 @@ class HomeController extends Controller {
             $array_cards_categories[$cardCategory->getCategory()->getId()]['cards'][] = array('id' => $cardCategory->getCard()->getId(), 'name' => $cardCategory->getCard()->getTitle(), 'filename' => $cardCategory->getCard()->getAbsolutePath());
         }
 
-        return array('groupCategories' => $groupCategories, 'cardsCategories' => $array_cards_categories);
+        return array('groupCategories' => $groupCategories,'carousel'=>true, 'cardsCategories' => $array_cards_categories);
     }
 
     /**

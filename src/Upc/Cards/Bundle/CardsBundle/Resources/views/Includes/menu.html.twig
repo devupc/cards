@@ -1,5 +1,5 @@
-<div id="menubar" class="navbar-wrapper">
-    <div class="container">
+<div id="menubar" {% if carousel == true %} class="carousel" {% endif %} >
+    <div class="container navbar-wrapper">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -7,12 +7,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="brand" href="#">Halcon Postales</a>
+                <a class="brand" href="{{ path('cards_homepage_home') }}">Halcon Postales</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
                         <li class="dropdown">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">Categorias<strong class="caret"></strong></a>
-                            {% include "CardsBundle:CategoryCrud:categoriesHome.html.twig" with { 'groupCategories': groupCategories } %}
+                            {% include "CardsBundle:Home:categoriesHome.html.twig" %}
                         </li>
                         <li><a href="#novedades">Novedades</a></li>
                         <li><a href="#comentarios">Comentarios</a></li>

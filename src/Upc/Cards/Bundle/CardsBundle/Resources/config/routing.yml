@@ -1,7 +1,12 @@
 _cards_homepage:
     resource: "@CardsBundle/Controller/HomeController.php"
     type:     annotation
-    prefix:   /    
+    prefix:   /  
+    
+_category:
+    resource: "@CardsBundle/Controller/CategoryController.php"
+    type:     annotation
+    prefix:   /categoria    
             
 ########################CRUDS CONTROLLERS#########################
 _admin_tarjetas:
@@ -16,3 +21,6 @@ _admin_gcategorias:
     resource: "@CardsBundle/Controller/GroupCategoryCrudController.php"
     type:     annotation
     prefix:   /admin/gruposcategorias
+    
+    
+   

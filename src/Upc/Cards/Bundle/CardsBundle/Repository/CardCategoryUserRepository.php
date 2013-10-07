@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class CardCategoryUserRepository extends EntityRepository {
 
-    public function getCardByUserId($user = null) {
+    public function getCardByUserId($slug = null) {
 
         $status = 1;
 
@@ -21,8 +21,15 @@ class CardCategoryUserRepository extends EntityRepository {
                 ->innerJoin('cu.category', 'cr')
                 ->innerJoin('cu.card', 'c')
                 ->where('cr.status = :c_status')
-                ->andWhere('cu.status = :c_status')
-                ->setParameter('c_status', $status);
+                ->andWhere('cu.status = :c_status');
+                
+
+        if ($slug) {
+            $qb->andWhere('cr.slug = :c_slug')
+                    ->setParameter('c_slug', $slug);
+        }
+        
+        $qb->setParameter('c_status', $status);
 
         return $qb->getQuery()->getResult();
     }

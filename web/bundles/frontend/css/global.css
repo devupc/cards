@@ -1,9 +1,13 @@
 body {padding-bottom: 40px;color: #5a5a5a;}
-#menubar { position: absolute;top: 0;left: 0;right: 0;z-index: 10;margin-top: 20px;margin-bottom: -90px;}
+#menubar.carousel { position: absolute;top: 0;left: 0;right: 0;z-index: 10;margin-top: 20px;margin-bottom: -90px;}
+#menubar {top: 0;left: 0;right: 0;z-index: 10;margin-top: 20px;}
 #menubar .navbar .navbar-inner {border: 0;-webkit-box-shadow: 0 2px 10px rgba(0,0,0,.25);-moz-box-shadow: 0 2px 10px rgba(0,0,0,.25);box-shadow: 0 2px 10px rgba(0,0,0,.25);}
 #menubar .navbar .brand {padding: 14px 20px 16px;font-size: 16px;font-weight: bold;text-shadow: 0 -1px 0 rgba(0,0,0,.5);}
 #menubar .navbar .nav > li > a {padding: 15px 20px;}
 #menubar .navbar .btn-navbar {margin-top: 10px;}
+.container .span4 {
+    text-align: center;
+}
 
 
 /* Carousel base class */

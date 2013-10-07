@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @author javier olivares
  */
 class CategoryCrudController extends Controller {
-    
-    
-    
+
     /**
      * @Route("/", name="admin_categorias_list")
      * @Template("")
@@ -42,24 +40,23 @@ class CategoryCrudController extends Controller {
             'form' => $form->createView()
         );
     }
-    
-     /**
+
+    /**
      * @Route("/add", name="admin_categorias_add")
      * @Template("")
      */
     public function newAction(Request $request) {
         $object = new Category();
-        $object->setCreatedAt( new \DateTime("now"));
+        $object->setCreatedAt(new \DateTime("now"));
         $form = $this->createForm('category', $object);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($object);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
-            'categoria',
-            'Registro grabado satisfactoriamente'
+                    'categoria', 'Registro grabado satisfactoriamente'
             );
             $nextAction = $form->get('saveAndAdd')->isClicked() ? 'admin_categorias_add' : 'admin_categorias_list';
             return $this->redirect($this->generateUrl($nextAction));
@@ -68,6 +65,7 @@ class CategoryCrudController extends Controller {
             'form' => $form->createView()
         );
     }
+
     /**
      * @Route("/{pk}", name="admin_categorias_edit")
      * @Template("")
@@ -77,13 +75,12 @@ class CategoryCrudController extends Controller {
         $form = $this->createForm('category', $object);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($object);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
-            'categoria',
-            'Registro modificado satisfactoriamente'
+                    'categoria', 'Registro modificado satisfactoriamente'
             );
             $nextAction = $form->get('saveAndAdd')->isClicked() ? 'admin_categorias_add' : 'admin_categorias_list';
             return $this->redirect($this->generateUrl($nextAction));
@@ -92,6 +89,7 @@ class CategoryCrudController extends Controller {
             'form' => $form->createView()
         );
     }
+
 }
 
 ?>

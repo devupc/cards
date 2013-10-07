@@ -1,0 +1,16 @@
+{% extends 'CardsBundle:Includes:index.html.twig' %}
+{% block content %}
+<div class="container marketing">
+    {% for cardCategory in cardsCategories %}
+    <div class="row">
+        <div class="section_header" style="padding-left: 30px;"><h3>{{cardCategory.name}}</h3></div>
+            {% for card in cardCategory.cards %}
+                <div class="span4">
+                    <img class="img-circle" style="width: 180px; height: 180px;" src="{{ app.request.getBasePath }}/{{card.filename}}" alt="Image" style="max-width:100%;" />
+                    <h2>{{card.name}}</h2>
+                </div><!-- /.span4 -->
+            {% endfor %}
+        </div>
+    {% endfor %}
+ </div>
+{% endblock %}

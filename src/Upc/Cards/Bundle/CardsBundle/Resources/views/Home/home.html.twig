@@ -13,7 +13,7 @@
                     <div class="item active">
                         <div class="row-fluid">
                         {% for card in cardCategory.cards %}
-                                <div class="span3"><a href="#x" class="thumbnail"><img src="{{ app.request.getBasePath }}/{{card.filename}}" alt="Image" style="max-width:100%;" /></a></div>
+                                <div class="span3"><a href="#x" class="thumbnail"><img src="{{ app.request.getBasePath }}/{{card.filename }} " alt="Image" style="max-width:100%;" /></a></div>
                         {% endfor %}
                                     </div>
                                 </div>

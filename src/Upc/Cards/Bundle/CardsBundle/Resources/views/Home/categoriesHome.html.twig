@@ -2,7 +2,7 @@
     {% for groupCategory in groupCategories %}
         <li class="nav-header">{{groupCategory.name}}</li>
         {% for category in groupCategory.categories %}
-        <li><a href="#">{{category.name}}</a></li>
+        <li><a href="{{ path('category_cards', {'slug': category.slug}) }}">{{category.name}}</a></li>
         {% endfor%}
     {% else %}            
             
