@@ -3,6 +3,7 @@
 namespace Upc\Cards\Bundle\CardsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CrdCardShipping
@@ -10,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="crd_card_shipping")
  * @ORM\Entity(repositoryClass="Upc\Cards\Bundle\CardsBundle\Repository\CardShippingRepository")
  */
-class CardShipping
-{
+class CardShipping {
+
     /**
      * @var integer
      *
@@ -22,9 +23,16 @@ class CardShipping
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="hash_id", type="string", length=150, nullable=false)
+     */
+    private $hashId;
+
+    /**
      * @var integer
      *
-     * @ORM\Column(name="idUsuario", type="integer", nullable=false)
+     * @ORM\Column(name="idUsuario", type="integer", nullable=true)
      */
     private $idusuario;
 
@@ -44,14 +52,14 @@ class CardShipping
 
     /**
      * @var string
-     *
+     * 
      * @ORM\Column(name="recipient_name", type="string", length=90, nullable=false)
      */
     private $recipientName;
 
     /**
      * @var string
-     *
+     * @Assert\Email(groups={"registration"})
      * @ORM\Column(name="recipient_email", type="string", length=90, nullable=false)
      */
     private $recipientEmail;
@@ -65,7 +73,7 @@ class CardShipping
 
     /**
      * @var string
-     *
+     * @Assert\Email(groups={"registration"})
      * @ORM\Column(name="remitter_email", type="string", length=90, nullable=false)
      */
     private $remitterEmail;
@@ -122,14 +130,12 @@ class CardShipping
      */
     private $card;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -139,10 +145,9 @@ class CardShipping
      * @param integer $idusuario
      * @return CardShipping
      */
-    public function setIdusuario($idusuario)
-    {
+    public function setIdusuario($idusuario) {
         $this->idusuario = $idusuario;
-    
+
         return $this;
     }
 
@@ -151,9 +156,29 @@ class CardShipping
      *
      * @return integer 
      */
-    public function getIdusuario()
-    {
+    public function getIdusuario() {
         return $this->idusuario;
+    }
+
+    /**
+     * Set hashId
+     *
+     * @param string $hashId
+     * @return CardShipping
+     */
+    public function setHashId($hashId) {
+        $this->hashId = $hashId;
+
+        return $this;
+    }
+
+    /**
+     * Get hashId
+     *
+     * @return string 
+     */
+    public function getHashId() {
+        return $this->hashId;
     }
 
     /**
@@ -162,10 +187,9 @@ class CardShipping
      * @param string $ipAddress
      * @return CardShipping
      */
-    public function setIpAddress($ipAddress)
-    {
+    public function setIpAddress($ipAddress) {
         $this->ipAddress = $ipAddress;
-    
+
         return $this;
     }
 
@@ -174,8 +198,7 @@ class CardShipping
      *
      * @return string 
      */
-    public function getIpAddress()
-    {
+    public function getIpAddress() {
         return $this->ipAddress;
     }
 
@@ -185,10 +208,9 @@ class CardShipping
      * @param string $recipientTreatment
      * @return CardShipping
      */
-    public function setRecipientTreatment($recipientTreatment)
-    {
+    public function setRecipientTreatment($recipientTreatment) {
         $this->recipientTreatment = $recipientTreatment;
-    
+
         return $this;
     }
 
@@ -197,8 +219,7 @@ class CardShipping
      *
      * @return string 
      */
-    public function getRecipientTreatment()
-    {
+    public function getRecipientTreatment() {
         return $this->recipientTreatment;
     }
 
@@ -208,10 +229,9 @@ class CardShipping
      * @param string $recipientName
      * @return CardShipping
      */
-    public function setRecipientName($recipientName)
-    {
+    public function setRecipientName($recipientName) {
         $this->recipientName = $recipientName;
-    
+
         return $this;
     }
 
@@ -220,8 +240,7 @@ class CardShipping
      *
      * @return string 
      */
-    public function getRecipientName()
-    {
+    public function getRecipientName() {
         return $this->recipientName;
     }
 
@@ -231,10 +250,9 @@ class CardShipping
      * @param string $recipientEmail
      * @return CardShipping
      */
-    public function setRecipientEmail($recipientEmail)
-    {
+    public function setRecipientEmail($recipientEmail) {
         $this->recipientEmail = $recipientEmail;
-    
+
         return $this;
     }
 
@@ -243,8 +261,7 @@ class CardShipping
      *
      * @return string 
      */
-    public function getRecipientEmail()
-    {
+    public function getRecipientEmail() {
         return $this->recipientEmail;
     }
 
@@ -254,10 +271,9 @@ class CardShipping
      * @param string $remitterName
      * @return CardShipping
      */
-    public function setRemitterName($remitterName)
-    {
+    public function setRemitterName($remitterName) {
         $this->remitterName = $remitterName;
-    
+
         return $this;
     }
 
@@ -266,8 +282,7 @@ class CardShipping
      *
      * @return string 
      */
-    public function getRemitterName()
-    {
+    public function getRemitterName() {
         return $this->remitterName;
     }
 
@@ -277,10 +292,9 @@ class CardShipping
      * @param string $remitterEmail
      * @return CardShipping
      */
-    public function setRemitterEmail($remitterEmail)
-    {
+    public function setRemitterEmail($remitterEmail) {
         $this->remitterEmail = $remitterEmail;
-    
+
         return $this;
     }
 
@@ -289,8 +303,7 @@ class CardShipping
      *
      * @return string 
      */
-    public function getRemitterEmail()
-    {
+    public function getRemitterEmail() {
         return $this->remitterEmail;
     }
 
@@ -300,10 +313,9 @@ class CardShipping
      * @param string $message
      * @return CardShipping
      */
-    public function setMessage($message)
-    {
+    public function setMessage($message) {
         $this->message = $message;
-    
+
         return $this;
     }
 
@@ -312,8 +324,7 @@ class CardShipping
      *
      * @return string 
      */
-    public function getMessage()
-    {
+    public function getMessage() {
         return $this->message;
     }
 
@@ -323,10 +334,9 @@ class CardShipping
      * @param integer $status
      * @return CardShipping
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
-    
+
         return $this;
     }
 
@@ -335,8 +345,7 @@ class CardShipping
      *
      * @return integer 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -346,10 +355,9 @@ class CardShipping
      * @param \DateTime $shippingAt
      * @return CardShipping
      */
-    public function setShippingAt($shippingAt)
-    {
+    public function setShippingAt($shippingAt) {
         $this->shippingAt = $shippingAt;
-    
+
         return $this;
     }
 
@@ -358,8 +366,7 @@ class CardShipping
      *
      * @return \DateTime 
      */
-    public function getShippingAt()
-    {
+    public function getShippingAt() {
         return $this->shippingAt;
     }
 
@@ -369,10 +376,9 @@ class CardShipping
      * @param \DateTime $receivedAt
      * @return CardShipping
      */
-    public function setReceivedAt($receivedAt)
-    {
+    public function setReceivedAt($receivedAt) {
         $this->receivedAt = $receivedAt;
-    
+
         return $this;
     }
 
@@ -381,8 +387,7 @@ class CardShipping
      *
      * @return \DateTime 
      */
-    public function getReceivedAt()
-    {
+    public function getReceivedAt() {
         return $this->receivedAt;
     }
 
@@ -392,10 +397,9 @@ class CardShipping
      * @param \DateTime $expiredAt
      * @return CardShipping
      */
-    public function setExpiredAt($expiredAt)
-    {
+    public function setExpiredAt($expiredAt) {
         $this->expiredAt = $expiredAt;
-    
+
         return $this;
     }
 
@@ -404,8 +408,7 @@ class CardShipping
      *
      * @return \DateTime 
      */
-    public function getExpiredAt()
-    {
+    public function getExpiredAt() {
         return $this->expiredAt;
     }
 
@@ -415,10 +418,9 @@ class CardShipping
      * @param \DateTime $createdAt
      * @return CardShipping
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
@@ -427,8 +429,7 @@ class CardShipping
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -438,10 +439,9 @@ class CardShipping
      * @param \Upc\Cards\Bundle\CardsBundle\Entity\Card $card
      * @return CardShipping
      */
-    public function setCard(\Upc\Cards\Bundle\CardsBundle\Entity\Card $card = null)
-    {
+    public function setCard(\Upc\Cards\Bundle\CardsBundle\Entity\Card $card = null) {
         $this->card = $card;
-    
+
         return $this;
     }
 
@@ -450,8 +450,8 @@ class CardShipping
      *
      * @return \Upc\Cards\Bundle\CardsBundle\Entity\Card 
      */
-    public function getCard()
-    {
+    public function getCard() {
         return $this->card;
     }
+
 }

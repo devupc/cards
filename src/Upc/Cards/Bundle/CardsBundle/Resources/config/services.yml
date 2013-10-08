@@ -26,3 +26,7 @@ services:
         class: Upc\Cards\Bundle\CardsBundle\Form\Type\GroupCategorySearchType
         tags:
             - { name: form.type, alias: gcategory_search }
+    cards_crud.form.type.card_shipping:
+        class: Upc\Cards\Bundle\CardsBundle\Form\Type\CardShippingType
+        tags:
+            - { name: form.type, alias: card_shipping }            

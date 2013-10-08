@@ -6,7 +6,12 @@ _cards_homepage:
 _category:
     resource: "@CardsBundle/Controller/CategoryController.php"
     type:     annotation
-    prefix:   /categoria    
+    prefix:   /categoria
+    
+_card_shipping:
+    resource: "@CardsBundle/Controller/CardShippingController.php"
+    type:     annotation
+    prefix:   /tarjeta    
             
 ########################CRUDS CONTROLLERS#########################
 _admin_tarjetas:

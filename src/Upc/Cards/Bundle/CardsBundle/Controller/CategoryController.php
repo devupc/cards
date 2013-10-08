@@ -22,10 +22,7 @@ class CategoryController extends Controller {
     public function listCardsAction(Request $request, $slug) {
 
         $em = $this->getDoctrine()->getEntityManager();
-        $groupCategories = $em->getRepository('CardsBundle:GroupCategory')->getCategoriesHome();
-
-
-
+        $groupCategories = $em->getRepository('CardsBundle:GroupCategory')->getCategoriesHome();        
         $cardsCategories = $em->getRepository('CardsBundle:CardCategoryUser')->getCardByUserId($slug);
 
         $array_cards_categories = array();

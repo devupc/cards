@@ -2,7 +2,7 @@
 
 namespace Upc\Cards\Bundle\CardsBundle\Controller;
 
-
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -12,48 +12,93 @@ use Upc\Cards\Bundle\CardsBundle\Entity\CardShipping;
 /**
  * CardShipping controller.
  *
- * @Route("/cardshipping")
  */
-class CardShippingController extends Controller
-{
+class CardShippingController extends Controller {
 
     /**
-     * Lists all CardShipping entities.
-     *
-     * @Route("/", name="cardshipping")
-     * @Method("GET")
-     * @Template()
+     * @Route("/confirmarenvio/{id}", name="card_shipping_view")
+     * @Template("")
      */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
+    public function viewAction(Request $request, $id) {
 
-        $entities = $em->getRepository('CardsBundle:CardShipping')->findAll();
+        $em = $this->getDoctrine()->getEntityManager();
+        $groupCategories = $em->getRepository('CardsBundle:GroupCategory')->getCategoriesHome();
 
-        return array(
-            'entities' => $entities,
-        );
-    }
-
-    /**
-     * Finds and displays a CardShipping entity.
-     *
-     * @Route("/{id}", name="cardshipping_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('CardsBundle:CardShipping')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find CardShipping entity.');
+        $dbr_cardShipping = $this->getDoctrine()->getRepository('CardsBundle:CardShipping')->findOneByHashId($id);
+        if (!$dbr_cardShipping) {
+            throw $this->createNotFoundException('Postal enviada no existe!');
         }
 
-        return array(
-            'entity'      => $entity,
-        );
+        return array('groupCategories' => $groupCategories, 'carousel' => false, 'cardShipping' => $dbr_cardShipping);
     }
+
+    /**
+     * @Route("/{id}", name="card_shipping_register")
+     * @Template("")
+     */
+    public function newAction(Request $request, $id) {
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $groupCategories = $em->getRepository('CardsBundle:GroupCategory')->getCategoriesHome();
+
+        $dbr_card = $this->getDoctrine()->getRepository('CardsBundle:Card')->find($id);
+
+        if (!$dbr_card) {
+            throw $this->createNotFoundException('Postal no existe!');
+        }
+
+        $object = new CardShipping();
+        $object->setCard($dbr_card);
+        $object->setCreatedAt(new \DateTime("now"));
+        $object->setShippingAt(new \DateTime("now"));
+        $object->setHashId(uniqid());
+        $form = $this->createForm('card_shipping', $object);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($object);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                    'cardShipping', 'Su postal ah sido enviada!'
+            );
+
+            $url_mailing = $this->generateUrl('card_shipping_review', array('id' => $object->getHashId()));
+            $url_action_view = $this->generateUrl('card_shipping_view', array('id' => $object->getHashId()));
+            $this->sendPostcard('http://' . $request->getHttpHost() . $url_mailing, $object);
+
+            return $this->redirect($url_action_view);
+        }
+
+        return array('groupCategories' => $groupCategories, 'carousel' => false, 'form' => $form->createView(), 'filename' => $dbr_card->getAbsolutePath());
+    }
+
+    /**
+     * @Route("/revisar/{id}", name="card_shipping_review")
+     * @Template("")
+     */
+    public function postReviewAction(Request $request, $id) {
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $groupCategories = $em->getRepository('CardsBundle:GroupCategory')->getCategoriesHome();
+
+        $dbr_cardShipping = $this->getDoctrine()->getRepository('CardsBundle:CardShipping')->findOneByHashId($id);
+        if (!$dbr_cardShipping) {
+            throw $this->createNotFoundException('Postal no existe!');
+        }
+
+        return array('groupCategories' => $groupCategories, 'carousel' => false, 'cardShipping' => $dbr_cardShipping);
+    }
+
+    protected function sendPostcard($url_mailing, $cardShipping) {
+
+        $message = \Swift_Message::newInstance()
+                ->setSubject('Has Recibido una nueva Postal')
+                ->setFrom('devel.web.app@gmail.com')
+                ->setTo($cardShipping->getRecipientEmail())
+                ->setBody($this->renderView('CardsBundle:CardShipping:postcard.html.twig', array('url_mailing' => $url_mailing, 'card' => $cardShipping)), 'text/html');
+
+        $this->get('mailer')->send($message);
+    }
+
 }

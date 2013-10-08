@@ -1,0 +1,23 @@
+{% extends 'CardsBundle:Includes:index.html.twig' %}
+{% block content %}
+<div class="container marketing">
+        <div class="span11">
+            <div class="row">
+                <div class="span3">
+                    <h4><strong> {{cardShipping.remitterName}} te ha enviado esta tarjeta </strong></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span2">
+                    <img src="{{ app.request.getBasePath }}/{{cardShipping.card.absolutePath}}" alt="">
+                </div>
+                <div class="span8">      
+                    <p>
+                        Mensaje: {{cardShipping.message}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

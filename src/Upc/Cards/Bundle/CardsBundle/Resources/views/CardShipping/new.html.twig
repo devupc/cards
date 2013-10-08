@@ -1,0 +1,48 @@
+{% extends 'CardsBundle:Includes:index.html.twig' %}
+{% block content %}
+<div class="container marketing">
+    <div class="span3">
+        <div class="logowrapper">
+            <img class="logoicon" src="{{ app.request.getBasePath }}/{{filename}}" alt="App Logo"/>
+        </div>
+    </div>
+
+    {{ form_start(form, {'attr': {'class': 'span8'}}) }}
+
+    {{ form_errors(form) }}
+    <div class="row">
+        <div class="span3">
+            <div id="legend">
+                <legend class="">Tus Datos</legend>
+            </div>                        
+                {{ form_label(form.remitterName) }}   
+                {{ form_errors(form.remitterName) }}
+                {{ form_widget(form.remitterName) }}
+                {{ form_label(form.remitterEmail) }}   
+                {{ form_errors(form.remitterEmail) }}
+                {{ form_widget(form.remitterEmail) }}   
+            <div id="legend">
+                <legend class="">Datos Destinatario</legend>
+            </div>
+                {{ form_label(form.recipientName) }}   
+                {{ form_errors(form.recipientName) }}
+                {{ form_widget(form.recipientName) }}
+                {{ form_label(form.recipientEmail) }}   
+                {{ form_errors(form.recipientEmail) }}
+                {{ form_widget(form.recipientEmail) }}    
+        </div>
+
+
+        <div class="span5">
+                {{ form_label(form.message) }}
+                {{ form_errors(form.message) }}
+                {{ form_widget(form.message) }}
+            </div>
+
+               {{ form_widget(form.save) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+

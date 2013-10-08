@@ -8,6 +8,8 @@ class CardsBundle extends Bundle
 {
     public static $ESTADOS = array(
         1 => 'ACTIVO',
-        2 => 'INACTIVO'
+        2 => 'INACTIVO',
+        3 => 'ENVIADA',
+        4 => 'POR ENVIADA'
     );
 }
