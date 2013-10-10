@@ -47,7 +47,7 @@ class HomeController extends Controller {
 
         $cards = $em->getRepository('CardsBundle:Card')->findBy(array(), array(
             'createdAt' => 'DESC'
-        ), 10);
+        ), 9);
         
         return array(
             'cards' => $cards,
