@@ -36,6 +36,25 @@ class HomeController extends Controller {
                 //'form' => $form->createView()
         );
     }
+    
+    /**
+     * @Route("/novedades", name="cards_homepage_novedades")
+     * @Template()
+     */
+    public function novedadesAction(Request $request) {
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $cards = $em->getRepository('CardsBundle:Card')->findBy(array(), array(
+            'createdAt' => 'DESC'
+        ), 10);
+        
+        return array(
+            'cards' => $cards,
+            'carousel' => false,
+            'groupCategories' => array()
+        );
+    }
 
     /**
      * @Route("/contact/add", name="cards_conctact_add")
