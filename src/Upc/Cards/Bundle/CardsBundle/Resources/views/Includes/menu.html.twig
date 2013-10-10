@@ -13,7 +13,7 @@
                         <li class="dropdown">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">Categorias<strong class="caret"></strong></a>
                             {% include "CardsBundle:Home:categoriesHome.html.twig" %}
-                        </li>{% if not app.session.get('contact') %}
+                        </li>{% if app.session.get('contact') %}
                         <li><a href="{{ path('cards_homepage_novedades') }}">Novedades</a></li>
                         {% endif %}
                         <!--<li><a href="#comentarios">Comentarios</a></li>-->
