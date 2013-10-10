@@ -1,7 +1,13 @@
 {% extends 'CardsBundle:Includes:index.html.twig' %}
 {% block content %}
 {% include "CardsBundle:Home:carousel.html.twig" %}
-<div class="container">        
+<div class="container">  
+    {% for flashMessage in app.session.flashbag.get('contact') %}
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
 {% for cardCategory in cardsCategories %}
         <div class="well">
             <div id="myCarousel" class="carousel slide">

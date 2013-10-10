@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Upc\Cards\Bundle\CardsBundle\Entity\Contact;
 
 class HomeController extends Controller {
 
@@ -26,8 +27,44 @@ class HomeController extends Controller {
             $array_cards_categories[$cardCategory->getCategory()->getId()]['name'] = $cardCategory->getCategory()->getName();
             $array_cards_categories[$cardCategory->getCategory()->getId()]['cards'][] = array('id' => $cardCategory->getCard()->getId(), 'name' => $cardCategory->getCard()->getTitle(), 'filename' => $cardCategory->getCard()->getAbsolutePath());
         }
-
-        return array('groupCategories' => $groupCategories,'carousel'=>true, 'cardsCategories' => $array_cards_categories);
+        
+        $form = $this->createForm('contact');
+        return array(
+            'groupCategories' => $groupCategories,
+            'carousel'=>true, 
+            'cardsCategories' => $array_cards_categories,
+            'form' => $form->createView()
+        );
+    }
+    
+    /**
+     * @Route("/contact/add", name="cards_conctact_add")
+     * @Template("")
+     */
+    public function addContactAction(Request $request){
+        $object = new Contact();
+        $object->setCreatedAt( new \DateTime("now"));
+        $form = $this->createForm('contact', $object);
+//        print_r($request);
+//        echo $request;
+        $form->handleRequest($request);
+        
+//        if($form->isValid()){
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+        'contact',
+        'Su registro fue satisfactorio'
+        );
+        return $this->redirect($this->generateUrl('cards_homepage_home'));
+//        }else{
+//            $this->get('session')->getFlashBag()->add(
+//            'contact',
+//            $form->getErrorsAsString()
+//            );
+//            return $this->redirect($this->generateUrl('cards_homepage_home'));
+//        }
     }
 
     /**
