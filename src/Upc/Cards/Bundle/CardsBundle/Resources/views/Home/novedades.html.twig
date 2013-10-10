@@ -5,7 +5,7 @@
     {% for card in cards %}
     <div class="row">
             <div class="span4">
-                <a href="{{ path('card_shipping_register', {'id': card.id}) }}"><img class="img-circle" style="width: 180px; height: 180px;" src="{{ app.request.getBasePath }}/{{card.filename}}" alt="Image" style="max-width:100%;" /></a>
+                <a href="{{ path('card_shipping_register', {'id': card.id}) }}"><img class="img-circle" style="width: 180px; height: 180px;" src="{{ app.request.getBasePath }}/{{card.card_path}}" alt="Image" style="max-width:100%;" /></a>
                 <h2>{{card.title}}</h2>
             </div><!-- /.span4 -->
     {% endfor %}
