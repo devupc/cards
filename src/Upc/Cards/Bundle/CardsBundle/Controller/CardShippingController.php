@@ -52,6 +52,11 @@ class CardShippingController extends Controller {
         $object->setCreatedAt(new \DateTime("now"));
         $object->setShippingAt(new \DateTime("now"));
         $object->setHashId(uniqid());
+        $contact = $this->get('session')->get('contact');
+        if (null !== $contact) {
+            $object->setRemitterName($contact->getFirstName().' '.$contact->getLastName());
+            $object->setRemitterEmail($contact->getEmail());
+        }
         $form = $this->createForm('card_shipping', $object);
         $form->handleRequest($request);
 
