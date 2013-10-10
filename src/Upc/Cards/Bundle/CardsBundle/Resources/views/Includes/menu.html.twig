@@ -18,6 +18,7 @@
                         <li><a href="#comentarios">Comentarios</a></li>
                     </ul>
                     <ul class="nav pull-right">
+                        {% if not app.session.get('contact') %}
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">Registrate <strong class="caret"></strong></a>
                             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
@@ -37,11 +38,18 @@
                                 </form>
                             </div>
                         </li>
+                        {% endif %}
                         <li class="divider-vertical"></li>
                         <li class="dropdown">
+                            {% if app.session.get('contact') %}
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">{{ app.session.get('contact').firstName }}<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                                <li><a href="{{ path('cards_conctact_logout') }}" >Cerrar sesion</a></li>
+                            </ul>
+                            {% else %}
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">Iniciar Sesión <strong class="caret"></strong></a>
                             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                                <form method="post" action="login" accept-charset="UTF-8">
+                                <form method="post" action="{{ path('cards_conctact_login')}} " accept-charset="UTF-8">
                                     <input style="margin-bottom: 15px;" type="text" placeholder="Usuario" id="username" name="username" required="required">
                                     <input style="margin-bottom: 15px;" type="password" placeholder="Contraseña" id="password" name="password" required="required">
                                     <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
@@ -52,6 +60,7 @@
                                     <input class="btn btn-primary btn-block" type="button" id="login-twitter" value="Iniciar con Twitter">-->
                                 </form>
                             </div>
+                            {% endif %}
                         </li>
                     </ul>
                 </div><!--/.nav-collapse -->
