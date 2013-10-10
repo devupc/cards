@@ -21,19 +21,18 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">Registrate <strong class="caret"></strong></a>
                             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                                <form method="post" action="{{ path('cards_conctact_add') }}" accept-charset="UTF-8">
-                                    {{ form_widget(form.firstName) }}
-                                    {{ form_widget(form.lastName) }}
-                                    {{ form_widget(form.email) }}
-                                    {{ form_widget(form.gender) }}
+                                <form method="post" action="/final/cards/web/app_dev.php/contact/add" accept-charset="UTF-8">
+                                    <input type="text" id="contact_firstName" name="contact[firstName]" required="required" maxlength="60" placeholder="Nombres">
+                                    <input type="text" id="contact_lastName" name="contact[lastName]" required="required" maxlength="60" placeholder="Apellidos">
+                                    <input type="email" id="contact_email" name="contact[email]" required="required" placeholder="Email">
+                                    <select id="contact_gender" name="contact[gender]" placeholder="Genero"><option value="">---Seleccione---</option><option value="1">Masculino</option><option value="2">Femenino</option><option value="3">Otro</option></select>
                                     <input type="date" id="contact_birthday" name="contact[birthday]" placeholder="Cumpleaños">
-                                    {{ form_widget(form.sourceType) }}
-                                    {{ form_widget(form.relationType) }}
+                                    <select id="contact_sourceType" name="contact[sourceType]" placeholder="Origen"><option value="">---Seleccione---</option><option value="1">Internet</option><option value="2">Redes Sociales</option><option value="3">Otro</option></select>
+                                    <select id="contact_relationType" name="contact[relationType]" placeholder="Tipo"><option value="">---Seleccione---</option><option value="1">Señor</option><option value="2">Señora</option><option value="3">Señorita</option></select>
                                     <input type="date" id="contact_dateAnniversary" name="contact[dateAnniversary]" placeholder="Aniversario">
-                                    {{ form_widget(form.cellphone) }}
-                                    {{ form_widget(form.phone) }}
-                                    {{ form_widget(form.save) }}
-                                    
+                                    <input type="text" id="contact_cellphone" name="contact[cellphone]" maxlength="15" placeholder="Celular">
+                                    <input type="text" id="contact_phone" name="contact[phone]" maxlength="15" placeholder="Telefono">
+                                    <button type="submit" id="contact_save" name="contact[save]" class="btn btn-primary">Registrar</button>
                                 </form>
                             </div>
                         </li>
