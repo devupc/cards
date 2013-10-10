@@ -22,7 +22,7 @@
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">Registrate <strong class="caret"></strong></a>
                             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                                <form method="post" action="/final/cards/web/app_dev.php/contact/add" accept-charset="UTF-8">
+                                <form method="post" action="{{ path('cards_conctact_add') }}" accept-charset="UTF-8">
                                     <input type="text" id="contact_firstName" name="contact[firstName]" required="required" maxlength="60" placeholder="Nombres">
                                     <input type="text" id="contact_lastName" name="contact[lastName]" required="required" maxlength="60" placeholder="Apellidos">
                                     <input type="email" id="contact_email" name="contact[email]" required="required" placeholder="Email">
