@@ -23,13 +23,13 @@ class ContactType extends AbstractType {
                 ->add('lastName', null, array(
                     'required' => true,
                     'attr' => array(
-                        'placeholder' => 'Apellidos'
-            )))
+                        'placeholder' => 'Apellidos')
+                ))
                 ->add('email', 'email', array(
                     'required' => true,
                     'attr' => array(
-                        'placeholder' => 'Email'
-            )))
+                        'placeholder' => 'Email')
+                ))
                 ->add('gender', 'choice', array(
                     'required' => false,
                     'choices' => array(
@@ -39,24 +39,36 @@ class ContactType extends AbstractType {
                     ),
                     'empty_value' => '---Seleccione---',
                     'attr' => array(
-                        'placeholder' => 'Genero'
-            )))
+                        'placeholder' => 'Genero')
+                ))
 //                ->add('birthday', 'text', array(
 //                    'required' => false,
 //                    'attr' => array(
 //                        'placeholder' => 'Cumpleaños',
 //                        'type' => 'date'
 //            )))
-                ->add('sourceType', null, array(
+                ->add('sourceType', 'choice', array(
                     'required' => false,
                     'attr' => array(
-                        'placeholder' => 'Origen'
-            )))
-                ->add('relationType', null, array(
+                        'placeholder' => 'Origen',),
+                    'choices' => array(
+                        1 => 'Internet',
+                        2 => 'Redes Sociales',
+                        3 => 'Otro'
+                    ),
+                    'empty_value' => '---Seleccione---'
+                ))
+                ->add('relationType', 'choice', array(
                     'required' => false,
                     'attr' => array(
-                        'placeholder' => 'Tipo'
-            )))
+                        'placeholder' => 'Tipo'),
+                    'choices' => array(
+                            1 => 'Señor',
+                            2 => 'Señora',
+                            3 => 'Señorita'
+                        ),
+                    'empty_value' => '---Seleccione---'
+                ))
 //                ->add('date_anniversary', 'text', array(
 //                    'required' => false,
 //                    'attr' => array(
@@ -65,18 +77,18 @@ class ContactType extends AbstractType {
                 ->add('cellphone', null, array(
                     'required' => false,
                     'attr' => array(
-                        'placeholder' => 'Celular'
-            )))
+                        'placeholder' => 'Celular')
+                ))
                 ->add('phone', null, array(
                     'required' => false,
                     'attr' => array(
-                        'placeholder' => 'Telefono'
-            )))
-                ->add('status', null, array(
-                    'required' => false,
-                    'attr' => array(
-                        'placeholder' => 'Estado'
-            )))
+                        'placeholder' => 'Telefono')
+                ))
+//                ->add('status', null, array(
+//                    'required' => false,
+//                    'attr' => array(
+//                        'placeholder' => 'Estado'
+//            )))
                 ->add('save', 'submit', array(
                     'label' => 'Registrar',
                     'attr' => array('class' => 'btn btn-primary'),));
