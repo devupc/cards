@@ -34,4 +34,7 @@ services:
         class: Upc\Cards\Bundle\CardsBundle\Form\Type\ContactType
         tags:
             - { name: form.type, alias: contact }
-            
+    cards_crud.form.type.card_shipping:
+        class: Upc\Cards\Bundle\CardsBundle\Form\Type\CardShippingType
+        tags:
+            - { name: form.type, alias: card_shipping }       
