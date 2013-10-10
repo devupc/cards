@@ -4,6 +4,10 @@ security:
             algorithm:        pbkdf2
             encode_as_base64: true
             iterations:       100
+        Upc\Cards\Bundle\CardsBundle\Entity\Contact:
+            algorithm:        pbkdf2
+            encode_as_base64: true
+            iterations:       100
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER

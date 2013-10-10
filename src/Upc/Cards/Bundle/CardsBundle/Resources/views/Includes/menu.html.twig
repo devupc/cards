@@ -25,6 +25,7 @@
                                     <input type="text" id="contact_firstName" name="contact[firstName]" required="required" maxlength="60" placeholder="Nombres">
                                     <input type="text" id="contact_lastName" name="contact[lastName]" required="required" maxlength="60" placeholder="Apellidos">
                                     <input type="email" id="contact_email" name="contact[email]" required="required" placeholder="Email">
+                                    <input type="password" id="contact_password" name="contact[password]" required="required" maxlength="20" placeholder="Contraseña">
                                     <select id="contact_gender" name="contact[gender]" placeholder="Genero"><option value="">---Seleccione---</option><option value="1">Masculino</option><option value="2">Femenino</option><option value="3">Otro</option></select>
                                     <input type="date" id="contact_birthday" name="contact[birthday]" placeholder="Cumpleaños">
                                     <select id="contact_sourceType" name="contact[sourceType]" placeholder="Origen"><option value="">---Seleccione---</option><option value="1">Internet</option><option value="2">Redes Sociales</option><option value="3">Otro</option></select>
@@ -41,14 +42,14 @@
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">Iniciar Sesión <strong class="caret"></strong></a>
                             <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
                                 <form method="post" action="login" accept-charset="UTF-8">
-                                    <input style="margin-bottom: 15px;" type="text" placeholder="Usuario" id="username" name="username">
-                                    <input style="margin-bottom: 15px;" type="password" placeholder="Contraseña" id="password" name="password">
+                                    <input style="margin-bottom: 15px;" type="text" placeholder="Usuario" id="username" name="username" required="required">
+                                    <input style="margin-bottom: 15px;" type="password" placeholder="Contraseña" id="password" name="password" required="required">
                                     <input style="float: left; margin-right: 10px;" type="checkbox" name="remember-me" id="remember-me" value="1">
                                     <label class="string optional" for="user_remember_me"> Remember me</label>
                                     <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Iniciar Sesión">
-                                    <label style="text-align:center;margin-top:5px">or</label>
+                                    <!--<label style="text-align:center;margin-top:5px">or</label>
                                     <input class="btn btn-primary btn-block" type="button" id="login-facebook" value="Iniciar con Facebook">
-                                    <input class="btn btn-primary btn-block" type="button" id="login-twitter" value="Iniciar con Twitter">
+                                    <input class="btn btn-primary btn-block" type="button" id="login-twitter" value="Iniciar con Twitter">-->
                                 </form>
                             </div>
                         </li>

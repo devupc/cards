@@ -79,6 +79,11 @@ class ContactType extends AbstractType {
                     'attr' => array(
                         'placeholder' => 'Celular')
                 ))
+                ->add('password', null, array(
+                    'required' => false,
+                    'attr' => array(
+                        'placeholder' => 'Password')
+                ))
                 ->add('phone', null, array(
                     'required' => false,
                     'attr' => array(

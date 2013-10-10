@@ -43,12 +43,16 @@ class HomeController extends Controller {
      */
     public function addContactAction(Request $request){
         $object = new Contact();
+        $factory = $this->get('security.encoder_factory');
+        $encoder = $factory->getEncoder($object);
         $object->setCreatedAt( new \DateTime("now"));
         $form = $this->createForm('contact', $object);
 //        print_r($request);
 //        echo $request;
         $form->handleRequest($request);
         
+        $password = $encoder->encodePassword($object->getPassword(), $object->getEmail());
+        $object->setPassword($password);
 //        if($form->isValid()){
         $em = $this->getDoctrine()->getManager();
         $em->persist($object);

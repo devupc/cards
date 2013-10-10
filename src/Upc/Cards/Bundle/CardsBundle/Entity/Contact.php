@@ -38,6 +38,13 @@ class Contact
     /**
      * @var string
      *
+     * @ORM\Column(name="password", type="string", length=128, nullable=true)
+     */
+    private $password;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="email", type="string", length=90, nullable=false)
      */
     private $email;
@@ -454,5 +461,28 @@ class Contact
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     * @return Contact
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string 
+     */
+    public function getPassword()
+    {
+        return $this->password;
     }
 }
