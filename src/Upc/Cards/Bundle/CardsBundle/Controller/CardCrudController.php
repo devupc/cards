@@ -70,7 +70,7 @@ class CardCrudController extends Controller
             'card',
             'Registro grabado satisfactoriamente'
             );
-            $nextAction = $form->get('saveAndAdd')->isClicked() ? 'admin_cards_add' : 'admin_tarjetas_list';
+            $nextAction = $form->get('saveAndAdd')->isClicked() ? 'admin_tarjetas_add' : 'admin_tarjetas_list';
             return $this->redirect($this->generateUrl($nextAction));
         }
         return array(

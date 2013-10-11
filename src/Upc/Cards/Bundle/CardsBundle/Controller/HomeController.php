@@ -112,7 +112,7 @@ class HomeController extends Controller {
                 'email' => $email,
                 'password' => $password
             ));
-            echo $contact->getFirstName();
+//            echo $contact->getFirstName();
             //echo $contact;
             if (null !== $contact) {
                 $this->get('session')->getFlashBag()->add(
@@ -122,7 +122,7 @@ class HomeController extends Controller {
                 return $this->redirect($this->generateUrl('cards_homepage_home'));
             } else {
                 $this->get('session')->getFlashBag()->add(
-                        'contact', "El usuario $email o contraseña $password son incorrectos"
+                        'contact', "El usuario  o contraseña son incorrectos"
                 );
                 return $this->redirect($this->generateUrl('cards_homepage_home'));
             }
